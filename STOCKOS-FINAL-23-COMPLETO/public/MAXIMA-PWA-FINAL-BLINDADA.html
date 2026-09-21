@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MAXIMA PWA FINAL - BLINDADA</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0f172a">
+<style>body{font-family:Montserrat,sans-serif;background:#F5F7FA;color:#0A2640;padding:16px} #btnInstall{display:none;position:fixed;bottom:16px;right:16px;z-index:9999;height:44px;padding:0 20px;background:#0A2640;color:#fff;border:0;border-radius:9999px;font-weight:700;font-size:13px;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.2)}</style>
+<script>
+// === 7 CAPAS BLINDADAS ===
+var _memStore = window._memStore || {}; window._memStore = _memStore;
+function safeLSGet(k){
+  try{
+    const v=localStorage.getItem(k);
+    if(v){
+      try{ _memStore[k]=JSON.parse(v); }catch(_){ _memStore[k]=v; }
+      return _memStore[k];
+    }
+    return _memStore[k]||null
+  }catch(e){
+    return _memStore[k]||null
+  }
+}
+function safeLSSet(k,val){
+  try{
+    const str=JSON.stringify(val);
+    localStorage.setItem(k,str);
+    _memStore[k]=val;
+    return true;
+  }catch(e){
+    try{ _memStore[k]=val; }catch(_){}
+    return false;
+  }
+}
+function escapeHTML(s){
+  if(s==null) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#x27;');
+}
+</script>
+</head>
+<body>
+<h1>MAXIMA PWA FINAL - BLINDADA</h1>
+<small style="opacity:.6;font-size:11px">7 capas: manifest físico / sw.js precache / beforeinstallprompt con botón / safeLSGet _memStore / escapeHTML</small>
+<div id="app" style="margin-top:16px;display:grid;gap:8px"></div>
+
+<button id="btnInstall">Instalar MAXIMA</button>
+
+<script>
+// 2. manifest físico - ya linkeado en head href="/manifest.json"
+
+// 3. service worker físico /sw.js con precache y fallback
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('/sw.js',{scope:'/'}).then(reg=>{
+      console.log('SW blindado registrado:', reg.scope);
+    }).catch(err=>{
+      console.log('SW error:', err);
+    });
+  });
+}
+
+// 4. beforeinstallprompt con botón real
+let deferredPrompt = null;
+const btnInstall = document.getElementById('btnInstall');
+
+window.addEventListener('beforeinstallprompt', (e)=>{
+  e.preventDefault();
+  deferredPrompt = e;
+  btnInstall.style.display = 'block';
+  console.log('PWA instalable - botón visible');
+});
+
+btnInstall.addEventListener('click', async ()=>{
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  console.log('Instalación:', outcome);
+  deferredPrompt = null;
+  btnInstall.style.display = 'none';
+});
+
+window.addEventListener('appinstalled', ()=>{
+  console.log('PWA instalada');
+  btnInstall.style.display = 'none';
+  deferredPrompt = null;
+});
+
+// 5. render con escapeHTML + safeLSGet blindado
+function renderProductos(){
+  const productos = safeLSGet('productos') || [
+    {nombre:'Placa Yeso 1/2 MAXIMA'},
+    {nombre:'Paral 90 calibre 26'}
+  ];
+  document.getElementById('app').innerHTML = productos.map(p=>`<div style="background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:12px;font-size:13px"><b>${escapeHTML(p.nombre)}</b></div>`).join('');
+}
+renderProductos();
+
+// Guardar ejemplo con safeLSSet blindado (no rompe incógnito)
+safeLSSet('productos', safeLSGet('productos') || [{nombre:'Placa Yeso 1/2 MAXIMA'},{nombre:'Paral 90 calibre 26'}]);
+
+window.onerror = function(msg){
+  try{
+    if(typeof msg==='string' && (msg.includes('ResizeObserver')||msg.includes('Script error'))) return true;
+  }catch(e){}
+  return true;
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>STOCKOS SuperAdmin - FINAL</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700;800;900&display=swap" rel="stylesheet">
+<style>body{font-family:Montserrat,sans-serif}</style>
+</head><body class="bg-[#F6F8FA] text-[#0A2640]">
+<div class="max-w-[900px] mx-auto p-4 mt-4">
+<div class="flex justify-between items-center mb-4">
+<h2 class="font-black text-[16px]">STOCKOS SuperAdmin</h2>
+<button onclick="window.location.href='landing-final.html'" class="h-9 px-5 bg-white border border-black/10 rounded-full text-[11px] font-bold">← Volver a Landing</button>
+</div>
+<!-- 1. CREAR -->
+<div class="bg-white border border-black/10 rounded-[20px] p-6">
+<h3 class="font-black text-[13px] mb-4">1. Crear empresa directa (SuperAdmin)</h3>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+<input id="nEmp" placeholder="Nombre empresa" class="h-11 border border-black/10 rounded-full px-5 text-[12px] bg-[#F6F8FA] outline-none">
+<input id="nWA" placeholder="WhatsApp" class="h-11 border border-black/10 rounded-full px-5 text-[12px] bg-[#F6F8FA] outline-none">
+<input id="nEmail" placeholder="Email" class="h-11 border border-black/10 rounded-full px-5 text-[12px] bg-[#F6F8FA] outline-none">
+<input id="nNit" placeholder="NIT" class="h-11 border border-black/10 rounded-full px-5 text-[12px] bg-[#F6F8FA] outline-none">
+</div>
+<button onclick="crearDirecta()" class="mt-4 h-11 px-8 bg-[#0A2640] text-white rounded-full text-[12px] font-bold">Crear empresa</button>
+</div>
+<!-- 2. DIRECTOS -->
+<div class="mt-6 bg-white border border-black/10 rounded-[20px] p-6">
+<h3 class="font-black text-[13px] mb-4">2. Clientes directos SuperAdmin</h3>
+<div id="listaDirectos" class="grid gap-3"></div>
+</div>
+<!-- 3. LANDING -->
+<div class="mt-6 bg-white border border-black/10 rounded-[20px] p-6">
+<div class="flex justify-between items-center mb-5"><h3 class="font-black text-[13px]">3. Clientes registrados (Landing)</h3><button onclick="location.reload()" class="h-7 px-4 border rounded-full text-[10px]">Recargar</button></div>
+<div id="listaLanding" class="grid gap-3"></div>
+</div>
+</div>
+<script>
+const SUPA_URL="https://mujrgighyioahlnliupf.supabase.co"; const SUPA_ANON="sb_publishable_ujS4qAeUE1rAaf9C9dRRDE_8NkojOqd";
+let supa=null;
+function safeGet(k,d){ try{ const r=localStorage.getItem(k); return r?JSON.parse(r):d; }catch{ return d; } }
+function safeSet(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch{} }
+async function initSupa(){ if(window.supabase){ supa=window.supabase.createClient(SUPA_URL,SUPA_ANON); } }
+function render(){
+  const todas=safeGet('stockos_ventas',[]);
+  const landing=todas.filter(v=>v.origen!=='superadmin_directo');
+  const directos=todas.filter(v=>v.origen==='superadmin_directo');
+  document.getElementById('listaLanding').innerHTML=landing.length?landing.slice().reverse().map(cardHtml).join(''):'<small class="opacity-50 text-[11px]">Sin clientes landing</small>';
+  document.getElementById('listaDirectos').innerHTML=directos.length?directos.slice().reverse().map(cardHtml).join(''):'<small class="opacity-50 text-[11px]">Sin clientes directos</small>';
+}
+function cardHtml(v){
+  const estado=v.estado||'pausado';
+  return `<div class="border border-black/10 rounded-[16px] p-4 flex flex-col md:flex-row justify-between gap-3 bg-white">
+    <div class="flex-1"><b class="text-[11px] uppercase">${v.empresa}</b><br><small class="text-[10px] opacity-60">${v.wa||''} | $${(v.total||190000).toLocaleString()} | ${v.email||''}</small></div>
+    <div class="flex items-center gap-2 flex-wrap">
+      <select onchange="cambiarEstado(${v.id},this.value)" class="h-8 border border-black/10 rounded-full px-3 text-[10px] bg-[#F6F8FA]"><option value="pausado" ${estado==='pausado'?'selected':''}>pausado</option><option value="aprobado" ${estado==='aprobado'?'selected':''}>aprobado</option><option value="pendiente" ${estado==='pendiente'?'selected':''}>pendiente</option></select>
+      <button onclick="aprobarSupa(${v.id})" class="h-8 px-4 bg-[#1ECB6A] text-white rounded-full text-[10px] font-bold">Aprobar + Supabase</button>
+      <button onclick="verPanel('${v.empresa}')" class="h-8 px-4 bg-[#0A2640] text-white rounded-full text-[10px] font-bold">Ver Panel</button>
+      <button onclick="eliminar(${v.id})" class="h-8 w-8 bg-[#FFE6E6] text-[#FF3B3B] rounded-full flex items-center justify-center text-[12px]">×</button>
+    </div>
+  </div>`;
+}
+function cambiarEstado(id,est){ let l=safeGet('stockos_ventas',[]); l=l.map(x=> x.id===id?{...x,estado:est}:x); safeSet('stockos_ventas',l); render(); }
+function eliminar(id){ if(!confirm('¿Eliminar empresa?')) return; let l=safeGet('stockos_ventas',[]); l=l.filter(x=>x.id!==id); safeSet('stockos_ventas',l); render(); }
+function crearDirecta(){ const emp=document.getElementById('nEmp').value.trim(); if(!emp){alert('Nombre');return;} let l=safeGet('stockos_ventas',[]); l.push({id:Date.now(),empresa:emp,wa:document.getElementById('nWA').value,email:document.getElementById('nEmail').value,nit:document.getElementById('nNit').value,total:190000,estado:'pausado',origen:'superadmin_directo',fecha:new Date().toLocaleString()}); safeSet('stockos_ventas',l); document.getElementById('nEmp').value=''; render(); }
+async function aprobarSupa(id){
+  let l=safeGet('stockos_ventas',[]); let c=l.find(x=>x.id===id); if(!c) return;
+  try{
+    if(!supa) await initSupa();
+    const {data,error}=await supa.from('empresas').insert({name:c.empresa,whatsapp:c.wa||'',email:c.email||'',nit:c.nit||'',estado:'aprobado',total:c.total||190000}).select().single();
+    if(error) throw error;
+    l=l.map(x=> x.id===id?{...x,estado:'aprobado'}:x); safeSet('stockos_ventas',l); render(); alert('Aprobada en Supabase: '+c.empresa);
+  }catch(e){ alert('Error Supabase: '+(e.message||e)+' - Se aprueba local'); l=l.map(x=> x.id===id?{...x,estado:'aprobado'}:x); safeSet('stockos_ventas',l); render(); }
+}
+function verPanel(empresa){
+  localStorage.setItem('stockos_empresa_activa', empresa);
+  window.location.href='PANEL-EMPRESA-FINAL-BLINDADO-6MODULOS.html?empresa='+encodeURIComponent(empresa);
+}
+initSupa(); render();
+</script>
+</body></html>

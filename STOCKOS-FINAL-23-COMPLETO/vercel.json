@@ -1,0 +1,9 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/admin", "destination": "/01-ADMIN-FINAL-ESTABLE-CORRIGIDO.html" },
+    { "source": "/superadmin", "destination": "/01-ADMIN-FINAL-ESTABLE-CORRIGIDO.html" },
+    { "source": "/panel", "destination": "/PANEL-EMPRESA-FINAL-BLINDADO-6MODULOS.html" },
+    { "source": "/landing", "destination": "/landing-final.html" }
+  ]
+}
