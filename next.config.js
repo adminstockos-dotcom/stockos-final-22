@@ -1,1 +1,1 @@
-module.exports = { eslint: { ignoreDuringBuilds: true } };
+const nextConfig={}; module.exports=nextConfig;

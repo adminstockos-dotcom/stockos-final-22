@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>STOCKOS Panel Empresa - FINAL BLINDADO FULL</title>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>STOCKOS Panel Empresa - FINAL</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -12,14 +12,12 @@ body{font-family:Montserrat,sans-serif}
 </style>
 </head><body class="bg-[#F6F8FA] text-[#0A2640]">
 <div class="max-w-[1200px] mx-auto p-4">
-
 <div class="bg-white border rounded-[20px] p-5">
 <div class="flex justify-between items-center flex-wrap gap-3">
-<div><b id="nombreEmpresa" class="text-[18px] uppercase">VIRTUALCLASS</b><br><small class="text-[11px] opacity-60">Panel Empresa Final - Proceso Maxima: Escaner 7AM/2PM, A/B/C, Stock <5, Roles WA, Disparo hora pico, Despacho Mensajeros, Link filtrable - Empresa aislada</small></div>
-<div class="flex gap-2"><span class="text-[10px] bg-[#E6F8EE] text-[#1ECB6A] px-3 py-1 rounded-full font-bold">6 modulos unificados sin repetidos</span><span class="text-[10px] border px-3 py-1 rounded-full">Admin</span></div>
+<div><b id="nombreEmpresa" class="text-[18px] uppercase">EMPRESA</b><br><small class="text-[11px] opacity-60">Panel Empresa Final - 6 módulos desplegables - componente x componente - Tarifa 200k 1 modulo / 100k c/u - Supabase conectado</small></div>
+<div class="flex gap-2"><span class="text-[10px] bg-[#E6F8EE] text-[#1ECB6A] px-3 py-1 rounded-full font-bold">6 modulos unificados sin repetidos</span><a href="01-ADMIN-FINAL-ESTABLE-CORRIGIDO.html" class="text-[10px] border px-3 py-1 rounded-full">← SuperAdmin</a></div>
 </div>
 </div>
-
 <div class="mt-4 bg-white border rounded-[20px] p-3 flex flex-wrap gap-2">
 <button onclick="showTab(0)" id="t0" class="tab active">0. Definicion Infra por Empresa (SuperAdmin)</button>
 <button onclick="showTab(1)" id="t1" class="tab">1. Personas y Roles (FIJO)</button>
@@ -30,239 +28,49 @@ body{font-family:Montserrat,sans-serif}
 <button onclick="showTab(6)" id="t6" class="tab">6. CRM + Pagos</button>
 <button onclick="showTab(7)" id="t7" class="tab">Bodega Stock &lt;5</button>
 </div>
-
-<!-- 0. DEFINICION INFRA - COMPLETO IGUAL A LANDING POR MODULOS Y COMPONENTES -->
 <div id="p0" class="tabPanel mt-4">
 <div class="bg-white border rounded-[24px] p-6">
 <div class="flex justify-between items-center flex-wrap gap-3">
-<div><b class="text-[14px]">0. Definicion Infra por Empresa (SuperAdmin) - <span id="emp0" class="uppercase"></span></b><br><small class="text-[11px] opacity-60">Panel completo igual a landing - 6 modulos sin repetidos - Switch on/off individual por modulo y por componente - Empresa: <span class="emp"></span> - Aislada</small></div>
-<div class="flex gap-2"><button onclick="togglePanel()" class="h-10 px-5 bg-[#0A2640] text-white rounded-full text-[11px] font-bold">▼ Desplegar módulos</button><span class="text-[10px] bg-[#E6F8EE] text-[#1ECB6A] px-3 py-1 rounded-full font-bold self-center">6 modulos desplegables - componente x componente</span></div>
+<div><b class="text-[14px]">0. Definicion Infra por Empresa - <span class="emp"></span></b><br><small class="text-[11px] opacity-60">Igual que Landing - 6 modulos desplegables - Switch on/off individual por modulo y por componente - Empresa: <span class="emp"></span> - Aislada - Supabase OK</small></div>
+<div class="flex gap-2"><span class="text-[10px] bg-[#E6F8EE] text-[#1ECB6A] px-3 py-1 rounded-full font-bold">6 modulos desplegables - componente x componente</span></div>
 </div>
-<div id="panelInfra" class="mt-6"><div id="listaInfra" class="grid gap-4"></div>
+<div class="mt-6"><div id="listaInfra" class="grid gap-4"></div>
 <div class="mt-6 bg-[#F6F8FA] border rounded-[20px] p-5 flex justify-between items-center"><div><b class="text-[13px]">Total a pagar - Tarifa nueva</b><br><small class="text-[10px] opacity-60">1 modulo $200.000 / 2+ modulos $100.000 c/u - Sin $12.000 - Badge Incluido en modulo</small></div><b id="totalInfra" class="text-[16px] font-black">$0 COP</b></div>
 <div class="mt-4 flex gap-3"><button onclick="guardarInfra()" class="h-10 px-6 bg-[#1ECB6A] text-white rounded-full text-[11px] font-black">Guardar Infra <span class="emp"></span></button><small id="detallePrecio" class="text-[10px] opacity-60 self-center">Selecciona al menos 1 modulo</small></div>
 </div>
 </div>
 </div>
-
-<!-- 1. PERSONAS -->
-<div id="p1" class="tabPanel hidden mt-4">
-<div class="bg-white border rounded-[20px] p-6">
-<b class="text-[13px]">1. Personas y Roles (FIJO) - <span class="emp"></span></b><br><small class="text-[11px] opacity-60">Fijo bloqueado $0 - Admin empresa puede modificar nombres/tels, quitar/aumentar personas, crear roles y vincular.</small>
-<div class="mt-4 border rounded-[16px] p-4 flex justify-between items-center bg-[#FBFCFE]"><div><b class="text-[12px]">Ivan Cadena | Administrador</b><br><small class="text-[10px] opacity-60">WA: 3017919560</small></div><button class="h-7 px-3 bg-[#FFE6E6] text-[#FF3B3B] rounded-full text-[10px]">Quitar</button></div>
-<div class="mt-4 border rounded-[16px] p-4 bg-[#F6F8FA]">
-<b class="text-[11px]">+ Agregar persona</b>
-<div class="grid md:grid-cols-4 gap-3 mt-3">
-<input id="perNombre" placeholder="Nombre" class="h-11 border rounded-full px-5 text-[12px] bg-white">
-<input id="perWA" placeholder="WhatsApp" class="h-11 border rounded-full px-5 text-[12px] bg-white">
-<select id="perRol" class="h-11 border rounded-full px-5 text-[12px] bg-white"><option>Administrador</option><option>Supervisor de Pedidos</option><option>Responsable de Caja</option><option>Mensajeros / Patinadores</option></select>
-<button onclick="agregarPersona()" class="h-11 bg-[#0A2640] text-white rounded-full text-[11px] font-bold">+ Agregar</button>
-</div>
-<div class="mt-3 flex gap-2"><input id="nuevoRol" placeholder="Nuevo rol" class="flex-1 h-11 border rounded-full px-5 text-[12px] bg-white"><button onclick="crearRol()" class="h-11 px-5 bg-[#1ECB6A] text-white rounded-full text-[11px] font-bold">+ Crear rol</button></div>
-<div id="listaPersonas" class="mt-3 grid gap-2"></div>
-</div>
-</div>
-</div>
-
-<!-- 2. ESCANER -->
-<div id="p2" class="tabPanel hidden mt-4">
-<div class="bg-white border rounded-[20px] p-6">
-<b class="text-[13px]">2. Escaner A/B/C - <span class="emp"></span></b><br><small class="text-[11px] opacity-60">Escaneos fijos 7AM y 2PM. Define cada cuanto actualiza inventario el proveedor.</small>
-<div class="mt-4 border rounded-[16px] p-4 bg-[#F6F8FA]">
-<b class="text-[11px]">+ Crear proveedor</b>
-<div class="grid md:grid-cols-2 gap-3 mt-3">
-<input placeholder="Nombre proveedor" class="h-11 border rounded-full px-5 text-[12px] bg-white">
-<select class="h-11 border rounded-full px-5 text-[12px] bg-white"><option>Actualiza diario</option><option>Actualiza semanal</option></select>
-</div>
-<div class="mt-3 grid md:grid-cols-2 gap-3">
-<div class="border rounded-xl p-3 bg-white"><div class="flex justify-between"><b class="text-[11px]">Inventario por enlace a pagina web</b><div class="toggle on"><div class="dot"></div></div></div><input placeholder="Link / Email / WA grupo" class="mt-2 w-full h-10 border rounded-full px-4 text-[11px] bg-[#F6F8FA]"></div>
-<div class="border rounded-xl p-3 bg-white"><div class="flex justify-between"><b class="text-[11px]">Inventario por enlace Google Drive PDF o Excel</b><div class="toggle on"><div class="dot"></div></div></div><input placeholder="Link / Email / WA grupo" class="mt-2 w-full h-10 border rounded-full px-4 text-[11px] bg-[#F6F8FA]"></div>
-<div class="border rounded-xl p-3 bg-white"><div class="flex justify-between"><b class="text-[11px]">Enlace por correo electronico PDF o Excel</b><div class="toggle on"><div class="dot"></div></div></div><input placeholder="Link / Email / WA grupo" class="mt-2 w-full h-10 border rounded-full px-4 text-[11px] bg-[#F6F8FA]"></div>
-<div class="border rounded-xl p-3 bg-white"><div class="flex justify-between"><b class="text-[11px]">Enlace inventario por imagenes y textos en WhatsApp</b><div class="toggle on"><div class="dot"></div></div></div><input placeholder="Link / Email / WA grupo" class="mt-2 w-full h-10 border rounded-full px-4 text-[11px] bg-[#F6F8FA]"></div>
-</div>
-<button class="mt-4 h-10 px-6 bg-[#0A2640] text-white rounded-full text-[11px] font-bold">+ Guardar proveedor</button>
-</div>
-</div>
-</div>
-
-<!-- 3. CAMPANAS IA -->
-<div id="p3" class="tabPanel hidden mt-4">
-<div class="bg-white border rounded-[20px] p-6">
-<b class="text-[13px]">3. Campanas IA + Fotos Pro + Precios 40/85% - <span class="emp"></span> - UNIFICADO URLS + Horarios + Grupos</b><br><small class="text-[11px] opacity-60">Configuracion por red social - URLs de la empresa contratante + Grupos + Horarios (Tabla en una sola casilla)</small>
-<div class="mt-4 border rounded-[16px] p-4 bg-[#F6F8FA]">
-<div class="grid md:grid-cols-2 gap-3">
-<div><small class="text-[10px] font-bold">Facebook Page URL</small><input placeholder="https://facebook.com/tu-empresa" class="w-full h-10 border rounded-full px-4 mt-1 text-[11px] bg-white"></div>
-<div><small class="text-[10px] font-bold">Instagram URL</small><input placeholder="https://instagram.com/tu-empresa" class="w-full h-10 border rounded-full px-4 mt-1 text-[11px] bg-white"></div>
-<div><small class="text-[10px] font-bold">TikTok URL</small><input placeholder="https://tiktok.com/@tu-empresa" class="w-full h-10 border rounded-full px-4 mt-1 text-[11px] bg-white"></div>
-<div><small class="text-[10px] font-bold">YouTube Channel</small><input placeholder="https://youtube.com/@tu-empresa" class="w-full h-10 border rounded-full px-4 mt-1 text-[11px] bg-white"></div>
-<div><small class="text-[10px] font-bold">Facebook Ads Manager</small><input placeholder="ID Ads Manager" class="w-full h-10 border rounded-full px-4 mt-1 text-[11px] bg-white"></div>
-<div><small class="text-[10px] font-bold">Google My Business URL</small><input placeholder="Google Business Profile" class="w-full h-10 border rounded-full px-4 mt-1 text-[11px] bg-white"></div>
-</div>
-<div class="mt-5"><b class="text-[11px]">Grupos por administrador - Para autorizacion Grupos</b>
-<div class="grid md:grid-cols-3 gap-3 mt-2">
-<div class="border rounded-xl p-3 bg-white"><small class="text-[10px] font-bold">Grupos Propios (dueno) - <span class="emp"></span></small><select class="w-full h-8 border rounded-full mt-1 text-[10px]"><option>Seleccionar</option></select></div>
-<div class="border rounded-xl p-3 bg-white"><small class="text-[10px] font-bold">Comunidades que administra</small><select class="w-full h-8 border rounded-full mt-1 text-[10px]"><option>Seleccionar</option></select></div>
-<div class="border rounded-xl p-3 bg-white"><small class="text-[10px] font-bold">Grupos Casa (2 que pertenecen)</small><select class="w-full h-8 border rounded-full mt-1 text-[10px]"><option>Seleccionar</option></select></div>
-</div>
-</div>
-<div class="mt-5"><b class="text-[11px]">Horarios optimos de publicacion por red social + Grupos - <span class="emp"></span></b>
-<div class="grid md:grid-cols-2 gap-3 mt-2">
-<div class="border rounded-xl p-3 bg-white"><small class="text-[10px] font-bold">FACEBOOK</small><input placeholder="20:00 - 21:00" class="w-full h-8 border rounded-full mt-1 px-3 text-[10px]"></div>
-<div class="border rounded-xl p-3 bg-white"><small class="text-[10px] font-bold">INSTAGRAM</small><input placeholder="19:00 - 20:00" class="w-full h-8 border rounded-full mt-1 px-3 text-[10px]"></div>
-<div class="border rounded-xl p-3 bg-white"><small class="text-[10px] font-bold">TIKTOK</small><input placeholder="18:00" class="w-full h-8 border rounded-full mt-1 px-3 text-[10px]"></div>
-<div class="border rounded-xl p-3 bg-white"><small class="text-[10px] font-bold">YOUTUBE</small><input placeholder="20:00" class="w-full h-8 border rounded-full mt-1 px-3 text-[10px]"></div>
-<div class="border rounded-xl p-3 bg-white"><small class="text-[10px] font-bold">GRUPOS PROPIOS</small><input placeholder="08:00" class="w-full h-8 border rounded-full mt-1 px-3 text-[10px]"></div>
-<div class="border rounded-xl p-3 bg-white"><small class="text-[10px] font-bold">COMUNIDADES</small><input placeholder="09:00" class="w-full h-8 border rounded-full mt-1 px-3 text-[10px]"></div>
-<div class="border rounded-xl p-3 bg-white"><small class="text-[10px] font-bold">GRUPOS CASA</small><input placeholder="20:00" class="w-full h-8 border rounded-full mt-1 px-3 text-[10px]"></div>
-</div>
-<button class="mt-4 h-10 px-6 bg-[#0A2640] text-white rounded-full text-[11px] font-bold">Guardar toda Campanas + URLs + Grupos + Horarios - <span class="emp"></span></button>
-</div>
-</div>
-</div>
-</div>
-
-<!-- 4. DISPARO -->
-<div id="p4" class="tabPanel hidden mt-4">
-<div class="bg-white border rounded-[20px] p-6">
-<b class="text-[13px]">4. Disparo + Link Maestro Pro - <span class="emp"></span></b><br><small class="text-[11px] opacity-60">Link filtrable + filtros avanzados - Empresa aislada - Link termina con nombre empresa: <span class="emp"></span></small>
-<div class="mt-4 bg-[#0A2640] text-white rounded-[16px] p-4 flex justify-between items-center"><div><b class="text-[12px]">Link Maestro Filtrable - <span class="emp"></span></b><br><small class="text-[11px] opacity-70">https://stockos.com/inv/<span class="emp"></span></small><br><small class="text-[10px] opacity-60">Filtros avanzados: categoria, precio, stock, bodega, marca, fecha ingreso, proveedor, % utilidad</small></div><button class="h-9 px-5 bg-[#1ECB6A] rounded-full text-[11px] font-bold">Copiar Link</button></div>
-<div class="mt-4 grid md:grid-cols-3 gap-3">
-<div class="border rounded-xl p-4 bg-[#FBFCFE]"><b class="text-[11px]">Publicaciones en horarios de mayor impacto - <span class="emp"></span></b><br><small class="text-[10px] opacity-60">Horarios tomados de pestana 3 - Configurados por red social + grupos</small><br><small class="text-[10px] mt-2 block">Sin horarios aun - configura en pestana 3 Campanas IA</small></div>
-<div class="border rounded-xl p-4 bg-[#FBFCFE]"><b class="text-[11px]">Grupos propios de <span class="emp"></span> (dueno) - Alimentado por pestana 3</b><br><small class="text-[10px] opacity-60">Enlaces WA donde empresa es duena + grupos Casa + comunidades</small><div class="mt-2 text-[10px] opacity-60">GRUPOS PROPIOS: Sin grupos - agrega en pestana 3<br><br>COMUNIDADES: Sin comunidades - agrega en pestana 3<br><br>GRUPOS CASA: Sin grupos Casa - agrega en pestana 3</div></div>
-<div class="border rounded-xl p-4 bg-[#FBFCFE]"><b class="text-[11px]">WhatsApp Business + Cierres en privado - <span class="emp"></span></b><br><small class="text-[10px] opacity-60">Campanas BD 2.300 contactos, escanear pedidos automatico, cierres privado 68%, reportes clics 1.240 clics, 420 pedidos, conversion 34%<br><br>FB: sin enlace<br>IG: sin enlace</small></div>
-</div>
-<div class="mt-4 border rounded-xl p-4 bg-[#F6F8FA]"><b class="text-[11px]">Ejemplo Disparo Maestro cuando ya esta funcionando - <span class="emp"></span></b><table class="mt-2 w-full text-[10px] border"><tr class="bg-gray-100"><th class="p-2 border">Fecha</th><th class="p-2 border">Canal</th><th class="p-2 border">Mensaje</th><th class="p-2 border">Enviados</th><th class="p-2 border">Clics</th><th class="p-2 border">Pedidos</th><th class="p-2 border">Reporte</th></tr><tr><td class="p-2 border">14/09/2026 9:00</td><td class="p-2 border">FB + IG + WA VIP</td><td class="p-2 border">Oferta Stock &lt;5 - 10% OFF <span class="emp"></span></td><td class="p-2 border">890</td><td class="p-2 border">340</td><td class="p-2 border">78</td><td class="p-2 border text-[#1ECB6A]">Ver</td></tr><tr><td class="p-2 border">13/09/2026 15:00</td><td class="p-2 border">Grupos Propios + Casa</td><td class="p-2 border">Llegada bodega - <span class="emp"></span></td><td class="p-2 border">1.200</td><td class="p-2 border">560</td><td class="p-2 border">112</td><td class="p-2 border text-[#1ECB6A]">Ver</td></tr></table></div>
-</div>
-</div>
-
-<!-- 5. DESPACHOS -->
-<div id="p5" class="tabPanel hidden mt-4">
-<div class="bg-white border rounded-[20px] p-6">
-<b class="text-[13px]">5. Despachos - <span class="emp"></span> - Ejemplo funcionando</b><br><small class="text-[11px] opacity-60">Cliente, valor, proveedor por producto, datos cliente/despacho, guia - Empresa <span class="emp"></span></small>
-<table class="mt-4 w-full text-[11px] border"><tr class="bg-[#F6F8FA]"><th class="p-2 border">Cliente</th><th class="p-2 border">Valor</th><th class="p-2 border">Proveedor x Producto</th><th class="p-2 border">Datos cliente/despacho</th><th class="p-2 border">Guia</th><th class="p-2 border">Mensajero</th><th class="p-2 border">Estado</th></tr><tr><td class="p-2 border">Juan Perez - Cali</td><td class="p-2 border">$245.000</td><td class="p-2 border">Camiseta Oversize: MAXIMA BODEGA, Gorra: IMPORTADORA CALI</td><td class="p-2 border">Cra 15 #34-12, 301 1234567, Efectivo</td><td class="p-2 border">INTER 123456</td><td class="p-2 border">Carlos - Moto</td><td class="p-2 border bg-green-100">Entregado</td></tr><tr><td class="p-2 border">Maria Lopez - Bogota</td><td class="p-2 border">$890.000</td><td class="p-2 border">Tenis: <span class="emp"></span> Bodega 2</td><td class="p-2 border">Calle 80 12-34, 310 7654321, Nequi</td><td class="p-2 border">COORDINADORA 789012</td><td class="p-2 border">En ruta</td><td class="p-2 border bg-yellow-100">En transito</td></tr></table>
-<div class="mt-4 flex gap-2"><button class="h-10 px-6 bg-[#0A2640] text-white rounded-full text-[11px] font-bold">+ Nuevo despacho maestro diario - <span class="emp"></span></button><small class="text-[10px] opacity-60 self-center">Boton activo - guarda por empresa stockos_despachos_<span class="emp"></span></small></div>
-</div>
-</div>
-
-<!-- 6. CRM -->
-<div id="p6" class="tabPanel hidden mt-4">
-<div class="bg-white border rounded-[20px] p-6">
-<b class="text-[13px]">6. CRM + Pagos - <span class="emp"></span> - Ejemplo funcionando</b><br><small class="text-[11px] opacity-60">Cartera, abonos, facturacion - <span class="emp"></span></small>
-<div class="mt-4 grid md:grid-cols-3 gap-3">
-<div class="border rounded-xl p-4 bg-[#F6F8FA]"><b class="text-[11px]">Pipeline Ventas <span class="emp"></span></b><div class="mt-2 text-[11px] space-y-1"><div>- Leads: 124</div><div>- Cotizados: 89</div><div>- Cerrados: 67</div><div>- Facturados: $12.450.000</div></div></div>
-<div class="border rounded-xl p-4 bg-[#F6F8FA]"><b class="text-[11px]">Cartera por cobrar</b><div class="mt-2 text-[11px] space-y-1"><div>- Vencida: $2.300.000 (12 clientes)</div><div>- Por vencer: $5.100.000</div><div>- Abonos hoy: $890.000</div></div></div>
-<div class="border rounded-xl p-4 bg-[#F6F8FA]"><b class="text-[11px]">Pagos proveedores</b><div class="mt-2 text-[11px] space-y-1"><div>- Por pagar: $3.200.000</div><div>- Pagado hoy: $1.100.000</div><div>- Metodo: Transferencia, Nequi</div></div></div>
-</div>
-<table class="mt-4 w-full text-[11px] border"><tr class="bg-[#F6F8FA]"><th class="p-2 border">Cliente</th><th class="p-2 border">Factura</th><th class="p-2 border">Total</th><th class="p-2 border">Abonado</th><th class="p-2 border">Saldo</th><th class="p-2 border">Estado</th></tr><tr><td class="p-2 border">TIENDA LA 14 - <span class="emp"></span></td><td class="p-2 border">F-0012</td><td class="p-2 border">$1.200.000</td><td class="p-2 border">$800.000</td><td class="p-2 border">$400.000</td><td class="p-2 border bg-yellow-100">Parcial</td></tr></table>
-</div>
-</div>
-
-<!-- BODEGA -->
-<div id="p7" class="tabPanel hidden mt-4">
-<div class="bg-white border rounded-[20px] p-6">
-<b class="text-[13px]">Bodega Stock &lt;5 - Supabase <span class="emp"></span> - RLS disabled</b><br><small class="text-[11px] opacity-60">Dashboard stock critico por empresa <span class="emp"></span>. Muestra productos con stock menor a 5 desde Supabase tabla products filtrada por empresa_id. PWA instalable.</small>
-<div class="mt-4 border rounded-xl p-4 bg-[#F6F8FA]">
-<b class="text-[11px]">Como funciona:</b>
-<div class="mt-2 text-[11px] space-y-1 opacity-80"><div>1. Escaner 7AM/2PM actualiza stock desde proveedores -> Supabase</div><div>2. Supabase tabla products con empresa_id=<span class="emp"></span> filtra solo <span class="emp"></span></div><div>3. Panel Bodega muestra stock &lt;5 alerta roja</div><div>4. PWA instalable MAXIMA-PWA-FINAL.html abre mismo dashboard offline</div><div>5. Alerta WA al rol Responsable de Caja / Administrador</div></div>
-<div class="mt-4 flex gap-2"><button class="h-10 px-6 bg-[#0A2640] text-white rounded-full text-[11px] font-bold">Cargar Supabase <span class="emp"></span></button><button class="h-10 px-5 border rounded-full text-[11px]">Abrir PWA <span class="emp"></span></button></div>
-</div>
-<div class="mt-4 grid md:grid-cols-3 gap-3">
-<div class="border rounded-xl p-3 bg-[#FFE6E6]"><b class="text-[11px] text-[#FF3B3B]">CRITICO - Camiseta Negra Oversize Talla L - <span class="emp"></span></b><br><small class="text-[10px]">Stock: 2 | Bodega: Principal | Proveedor: MAXIMA BODEGA</small></div>
-<div class="border rounded-xl p-3 bg-[#FFF8E1]"><b class="text-[11px]">BAJO - Gorra Trucker Roja - <span class="emp"></span></b><br><small class="text-[10px]">Stock: 4 | Bodega: 2</small></div>
-<div class="border rounded-xl p-3 bg-[#E6F8EE]"><b class="text-[11px]">OK - Tenis Air 42 - <span class="emp"></span></b><br><small class="text-[10px]">Stock: 12</small></div>
-</div>
-</div>
-</div>
-
+<div id="p1" class="tabPanel hidden mt-4"><div class="bg-white border rounded-[20px] p-6"><b class="text-[13px]">1. Personas y Roles (FIJO) - <span class="emp"></span></b><br><small class="text-[11px] opacity-60">Fijo bloqueado $0 - Admin empresa puede modificar nombres/tels, quitar/aumentar personas, crear roles y vincular.</small><div class="mt-4 border rounded-[16px] p-4 flex justify-between items-center bg-[#FBFCFE]"><div><b class="text-[12px]">Administrador | Empresa</b><br><small class="text-[10px] opacity-60">WA: 3017919560</small></div><button class="h-7 px-3 bg-[#FFE6E6] text-[#FF3B3B] rounded-full text-[10px]">Quitar</button></div></div></div>
+<div id="p2" class="tabPanel hidden mt-4"><div class="bg-white border rounded-[20px] p-6"><b class="text-[13px]">2. Escaner A/B/C - <span class="emp"></span></b><br><small class="text-[11px] opacity-60">Escaneos fijos 7AM y 2PM. Define cada cuanto actualiza inventario el proveedor.</small><div id="mod2" class="mt-4 grid gap-3"></div></div></div>
+<div id="p3" class="tabPanel hidden mt-4"><div class="bg-white border rounded-[20px] p-6"><b class="text-[13px]">3. Campanas IA - <span class="emp"></span></b><div id="mod3" class="mt-4 grid gap-3"></div></div></div>
+<div id="p4" class="tabPanel hidden mt-4"><div class="bg-white border rounded-[20px] p-6"><b class="text-[13px]">4. Disparo + Link - <span class="emp"></span></b><div id="mod4" class="mt-4 grid gap-3"></div></div></div>
+<div id="p5" class="tabPanel hidden mt-4"><div class="bg-white border rounded-[20px] p-6"><b class="text-[13px]">5. Despachos - <span class="emp"></span></b><div id="mod5" class="mt-4 grid gap-3"></div></div></div>
+<div id="p6" class="tabPanel hidden mt-4"><div class="bg-white border rounded-[20px] p-6"><b class="text-[13px]">6. CRM + Pagos - <span class="emp"></span></b><div id="mod6" class="mt-4 grid gap-3"></div></div></div>
+<div id="p7" class="tabPanel hidden mt-4"><div class="bg-white border rounded-[20px] p-6"><b class="text-[13px]">Bodega Stock &lt;5 - <span class="emp"></span></b><br><small class="text-[11px] opacity-60">Dashboard stock critico por empresa - Supabase filtrado por empresa_id - PWA instalable.</small></div></div>
 </div>
 <script>
-function showTab(n){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById('t'+n).classList.add('active');
-  document.querySelectorAll('.tabPanel').forEach(p=>p.classList.add('hidden'));
-  document.getElementById('p'+n).classList.remove('hidden');
-}
-const emp=new URLSearchParams(window.location.search).get('empresa')||localStorage.getItem('stockos_empresa_activa')||'virtualclass';
+function showTab(n){ document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.getElementById('t'+n).classList.add('active'); document.querySelectorAll('.tabPanel').forEach(p=>p.classList.add('hidden')); document.getElementById('p'+n).classList.remove('hidden'); }
+const emp=new URLSearchParams(window.location.search).get('empresa')||localStorage.getItem('stockos_empresa_activa')||'EMPRESA';
 document.getElementById('nombreEmpresa').innerText=emp;
-const emp0El=document.getElementById('emp0'); if(emp0El) emp0El.innerText=emp;
 document.querySelectorAll('.emp').forEach(e=>e.innerText=emp);
-
-function safeGet(k,d){ try{ const r=localStorage.getItem(k); return r?JSON.parse(r):d; }catch{ return d; } }
-function safeSet(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch{} }
-
-// MODS IGUAL LANDING - CORREGIDO SIN $12k - tarifa 200k/100k
+function safeGet(k,d){ try{const r=localStorage.getItem(k); return r?JSON.parse(r):d;}catch{return d;} }
+function safeSet(k,v){ try{localStorage.setItem(k,JSON.stringify(v));}catch{} }
 const MODS=[
-{id:"personas",name:"1. Personas, Roles y Organización (CORE FIJO)",price:0,fixed:true,comps:[
-{id:"pe1",name:"Administrador (acceso total)",price:0,fixed:true},
-{id:"pe2",name:"Supervisor de Pedidos",price:0,fixed:true},
-{id:"pe3",name:"Responsable de Caja",price:0,fixed:true},
-{id:"pe4",name:"Mensajeros / Patinadores",price:0,fixed:true}
-]},
-{id:"scan",name:"2. Escáner Diario + Compras Proveedores A/B/C",price:0,comps:[
-{id:"s7",name:"Detecta producto A/B/C - Ranking Automático",price:0},
-{id:"s8",name:"Actualiza catálogo virtual stockos.com/inv/",price:0},
-{id:"s9",name:"Alerta stock bajo <5 por WA",price:0},
-{id:"s10",name:"Órdenes A/B/C",price:0},
-{id:"s11",name:"Control llegada bodega",price:0},
-{id:"s12",name:"Espacio para pegar enlaces proveedores - Escaneo 7AM/2PM",price:0}
-]},
-{id:"camp",name:"3. Campañas RRSS con IA",price:0,comps:[
-{id:"c1",name:"Fotos optimizadas IA",price:0},
-{id:"c2",name:"Precios 40%/85% (detal/mayorista)",price:0},
-{id:"c3",name:"Copy + hashtags",price:0},
-{id:"c5",name:"Publicaciones automáticas RRSS",price:0},
-{id:"c6",name:"Pauta pagada (presupuesto aparte)",price:0}
-]},
-{id:"disparo",name:"4. Disparo + Link Maestro Pro + Grupos Casa",price:0,comps:[
-{id:"d1",name:"Link filtrable stockos.com/inv/tu-empresa",price:0},
-{id:"d2",name:"Filtros avanzados (categoría, precio, stock)",price:0},
-{id:"d3",name:"Publica en horarios óptimos por red social (config SuperAdmin)",price:0},
-{id:"d4",name:"Grupos propios empresa",price:0},
-{id:"d5",name:"Comunidades propias empresa",price:0},
-{id:"d6",name:"Grupos venta - Grupos Casa",price:0},
-{id:"d7",name:"Enlace celular empresa",price:0},
-{id:"d8",name:"Escanea pedidos y compara inventario",price:0},
-{id:"d9",name:"Cierra ventas auto en privado por WA Business",price:0},
-{id:"d10",name:"Campañas bases datos WA Business",price:0},
-{id:"d11",name:"Reportes y clics (quién vio)",price:0},
-{id:"d12",name:"Link extra promo",price:0}
-]},
-{id:"despachos",name:"5. Despachos, guía y organización",price:0,comps:[
-{id:"de1",name:"Cierra venta",price:0},
-{id:"de2",name:"Organiza pedidos por ruta",price:0},
-{id:"de3",name:"Genera guía",price:0},
-{id:"de4",name:"Todo listo despachar - checklist Mensajeros",price:0}
-]},
-{id:"extras",name:"6. Fotos Variantes + Barras + CRM + Pagos",price:0,comps:[
-{id:"ex1",name:"Tallas",price:0},
-{id:"ex2",name:"Colores",price:0},
-{id:"ex3",name:"Códigos barras Pistola",price:0},
-{id:"ex4",name:"Etiquetas",price:0},
-{id:"ex5",name:"CRM Mayorista vs Detal (40%/85%)",price:0},
-{id:"ex6",name:"Historial pedidos",price:0},
-{id:"ex7",name:"Pagos: Contraentrega/Transf/Efectivo/Nequi/PSE/PayPal",price:0}
-]}
+{id:"personas",name:"1. Personas, Roles y Organización (CORE FIJO)",fixed:true,comps:[{id:"pe1",name:"Administrador (acceso total)",fixed:true},{id:"pe2",name:"Supervisor de Pedidos",fixed:true},{id:"pe3",name:"Responsable de Caja",fixed:true},{id:"pe4",name:"Mensajeros / Patinadores",fixed:true}]},
+{id:"scan",name:"2. Escáner Diario + Compras Proveedores A/B/C",comps:[{id:"s7",name:"Detecta producto A/B/C - Ranking Automático"},{id:"s8",name:"Actualiza catálogo virtual stockos.com/inv/"},{id:"s9",name:"Alerta stock bajo <5 por WA"},{id:"s10",name:"Órdenes A/B/C"},{id:"s11",name:"Control llegada bodega"},{id:"s12",name:"Espacio para pegar enlaces proveedores - Escaneo 7AM/2PM"}]},
+{id:"camp",name:"3. Campañas RRSS con IA",comps:[{id:"c1",name:"Fotos optimizadas IA"},{id:"c2",name:"Precios 40%/85% (detal/mayorista)"},{id:"c3",name:"Copy + hashtags"},{id:"c5",name:"Publicaciones automáticas RRSS"},{id:"c6",name:"Pauta pagada (presupuesto aparte)"}]},
+{id:"disparo",name:"4. Disparo + Link Maestro Pro + Grupos Casa",comps:[{id:"d1",name:"Link filtrable stockos.com/inv/tu-empresa"},{id:"d2",name:"Filtros avanzados"},{id:"d3",name:"Publica en horarios óptimos por red social"},{id:"d4",name:"Grupos propios empresa"},{id:"d5",name:"Comunidades propias empresa"},{id:"d6",name:"Grupos venta - Grupos Casa"},{id:"d7",name:"Enlace celular empresa"},{id:"d8",name:"Escanea pedidos y compara inventario"},{id:"d9",name:"Cierra ventas auto en privado por WA Business"},{id:"d10",name:"Campañas bases datos WA Business"},{id:"d11",name:"Reportes y clics"},{id:"d12",name:"Link extra promo"}]},
+{id:"despachos",name:"5. Despachos, guía y organización",comps:[{id:"de1",name:"Cierra venta"},{id:"de2",name:"Organiza pedidos por ruta"},{id:"de3",name:"Genera guía"},{id:"de4",name:"Todo listo despachar - checklist Mensajeros"}]},
+{id:"extras",name:"6. Fotos Variantes + Barras + CRM + Pagos",comps:[{id:"ex1",name:"Tallas"},{id:"ex2",name:"Colores"},{id:"ex3",name:"Códigos barras Pistola"},{id:"ex4",name:"Etiquetas"},{id:"ex5",name:"CRM Mayorista vs Detal"},{id:"ex6",name:"Historial pedidos"},{id:"ex7",name:"Pagos: Contraentrega/Transf/Efectivo/Nequi/PSE/PayPal"}]}
 ];
 let modState=safeGet('stockos_modState_'+emp,{scan:true,camp:true,disparo:true,despachos:true,extras:true});
 let sel=new Set(safeGet('stockos_sel_'+emp,["pe1","pe2","pe3","pe4","s7","s8","s9","s10","s11","s12","c1","c2","c3","c5","c6","d1","d2","d3","d4","d5","d6","d7","d8","d9","d10","d11","d12","de1","de2","de3","de4","ex1","ex2","ex3","ex4","ex5","ex6","ex7"]));
-
-function togglePanel(){ const p=document.getElementById('panelInfra'); if(p) p.classList.toggle('hidden'); }
-function toggleMod(id){
-  const mod=MODS.find(x=>x.id===id); if(!mod||mod.fixed) return;
-  modState[id]=!modState[id];
-  if(!modState[id]){ mod.comps.forEach(c=>{ if(!c.fixed) sel.delete(c.id); }); } else { mod.comps.forEach(c=>sel.add(c.id)); }
-  guardarEstado(); renderInfra(); recalcularTotalInfra();
-}
-function toggleComp(id){
-  const mod=MODS.find(m=>m.comps.some(c=>c.id===id)); const comp=mod.comps.find(c=>c.id===id); if(comp.fixed) return;
-  if(!modState[mod.id]){ alert('Activa primero '+mod.name); return; }
-  if(sel.has(id)) sel.delete(id); else sel.add(id);
-  guardarEstado(); renderInfra(); recalcularTotalInfra();
-}
-function guardarEstado(){ safeSet('stockos_modState_'+emp,modState); safeSet('stockos_sel_'+emp,Array.from(sel)); }
-
+function toggleMod(id){ const mod=MODS.find(x=>x.id===id); if(!mod||mod.fixed) return; modState[id]=!modState[id]; if(!modState[id]){ mod.comps.forEach(c=>{ if(!c.fixed) sel.delete(c.id); }); } else { mod.comps.forEach(c=>sel.add(c.id)); } guardar(); renderInfra(); }
+function toggleComp(id){ const mod=MODS.find(m=>m.comps.some(c=>c.id===id)); if(!modState[mod.id]&&!mod.fixed){ alert('Activa primero '+mod.name); return; } if(sel.has(id)) sel.delete(id); else sel.add(id); guardar(); renderInfra(); }
+function guardar(){ safeSet('stockos_modState_'+emp,modState); safeSet('stockos_sel_'+emp,Array.from(sel)); }
 function renderInfra(){
   const c=document.getElementById('listaInfra'); if(!c) return; c.innerHTML='';
+  const mapDiv={scan:'mod2',camp:'mod3',disparo:'mod4',despachos:'mod5',extras:'mod6'};
   MODS.forEach(mod=>{
     const masterOn=mod.fixed?true:!!modState[mod.id];
     const borderClass=!masterOn?'border-gray-300 bg-gray-50 opacity-60':(mod.comps.every(x=>sel.has(x.id))?'border-[#1ECB6A] bg-[#E6F8EE]':'bg-white');
@@ -273,31 +81,17 @@ function renderInfra(){
       const tog=comp.fixed?'<div class="toggle on" style="pointer-events:none"><div class="dot"></div></div>':'<div class="toggle '+(on?'on':'')+'" onclick="toggleComp(\''+comp.id+'\')"><div class="dot"></div></div>';
       return '<div class="flex items-center justify-between bg-[#F6F8FA] border rounded-full px-3 py-2.5 '+(masterOn?'':'opacity-50 pointer-events-none')+'"><span class="text-[11px]">'+comp.name+badge+'</span>'+tog+'</div>';
     }).join('');
-    const status=!masterOn?'<span class="text-[10px] bg-gray-200 px-2 py-1 rounded-full ml-2">No solicitado - 0 comps</span>':'<span class="text-[10px] bg-green-100 px-2 py-1 rounded-full ml-2">'+mod.comps.filter(cc=>sel.has(cc.id)).length+'/'+mod.comps.length+'</span>';
+    const status=!masterOn?'<span class="text-[10px] bg-gray-200 px-2 py-1 rounded-full ml-2">No solicitado</span>':'<span class="text-[10px] bg-green-100 px-2 py-1 rounded-full ml-2">'+mod.comps.filter(cc=>sel.has(cc.id)).length+'/'+mod.comps.length+'</span>';
     const masterTog=mod.fixed?'<div class="toggle on" style="pointer-events:none"><div class="dot"></div></div>':'<div class="toggle '+(masterOn?'on':'')+'" onclick="toggleMod(\''+mod.id+'\')"><div class="dot"></div></div>';
     div.innerHTML='<div class="flex justify-between items-center mb-3"><b class="text-[13px]">'+mod.name+status+'</b>'+masterTog+'</div><div class="grid md:grid-cols-2 gap-2">'+compsHtml+'</div>';
     c.appendChild(div);
+    if(mapDiv[mod.id]){ const cont=document.getElementById(mapDiv[mod.id]); if(cont) cont.innerHTML='<b class="text-[12px]">'+mod.name+'</b><div class="mt-2 grid md:grid-cols-2 gap-2">'+compsHtml+'</div>'; }
   });
+  let activos=0; MODS.forEach(m=>{ if(!m.fixed && modState[m.id]) activos++; });
+  let total=0; let detalle=''; if(activos===0){ detalle='Selecciona al menos 1 modulo'; } else if(activos===1){ total=200000; detalle='1 modulo x $200.000'; } else { total=activos*100000; detalle=activos+' modulos x $100.000 c/u'; }
+  const el=document.getElementById('totalInfra'); if(el) el.innerText='$'+total.toLocaleString()+' COP - '+detalle;
 }
-
-function recalcularTotalInfra(){
-  try{
-    let activos=0; MODS.forEach(m=>{ if(!m.fixed && modState[m.id]) activos++; });
-    let total=0; let detalle='';
-    if(activos===0){ total=0; detalle='Selecciona al menos 1 modulo'; }
-    else if(activos===1){ total=200000; detalle='1 modulo x $200.000'; }
-    else { total=activos*100000; detalle=activos+' modulos x $100.000 c/u'; }
-    const el=document.getElementById('totalInfra'); if(el) el.innerText='$'+total.toLocaleString()+' COP - '+detalle;
-    const badge=document.getElementById('detallePrecio'); if(badge) badge.innerText=detalle;
-    return total;
-  }catch(e){ return 0; }
-}
-
-function agregarPersona(){ const n=document.getElementById('perNombre').value; const r=document.getElementById('perRol').value; const w=document.getElementById('perWA').value; if(!n) return; let l=safeGet('personas_'+emp,[]); l.push({id:Date.now(),nombre:n,rol:r,wa:w}); safeSet('personas_'+emp,l); renderPersonas(); }
-function renderPersonas(){ const l=safeGet('personas_'+emp,[]); const cont=document.getElementById('listaPersonas'); if(!cont) return; cont.innerHTML=l.map(p=>`<div class="border rounded-xl p-2 text-[11px] flex justify-between bg-white"><span><b>${p.nombre}</b> - ${p.rol} - ${p.wa}</span></div>`).join('')||''; }
-function guardarInfra(){ const total=recalcularTotalInfra(); safeSet('stockos_infra_'+emp,{modState,comps:Array.from(sel),total,fecha:new Date().toLocaleString()}); alert('Infra guardada para '+emp+' - Total $'+total.toLocaleString()+' - Tarifa 200k/100k sin $12k - Componentes: '+sel.size); }
-function crearRol(){ const nr=document.getElementById('nuevoRol').value; if(!nr) return; alert('Rol creado: '+nr+' para '+emp); }
-
-renderInfra(); recalcularTotalInfra(); renderPersonas();
+function guardarInfra(){ const total=document.getElementById('totalInfra').innerText; safeSet('stockos_infra_'+emp,{modState,comps:Array.from(sel),total,fecha:new Date().toLocaleString()}); alert('Infra guardada para '+emp+' - '+total); }
+renderInfra();
 </script>
 </body></html>

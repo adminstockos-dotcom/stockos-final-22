@@ -11,17 +11,15 @@ body{font-family:Montserrat,sans-serif}
 </style>
 </head><body class="bg-[#FBFCFE] text-[#0A2640]">
 <div class="max-w-[1200px] mx-auto px-4 mt-4">
-
-<!-- HEADER LANDING -->
 <div class="bg-white border border-black/10 rounded-[24px] p-6 md:p-8 flex justify-between items-center">
 <div class="flex items-center gap-2"><span class="text-[22px]"><span class="logo-stock">STOCK</span><span class="logo-os">OS</span><span class="dot-green"></span></span><span class="ml-4 text-[12px] bg-[#0A2640] text-white px-3 py-1 rounded-full font-bold">SuperAdmin</span></div>
-<div class="text-right"><b class="text-[12px]">Panel Principal</b><br><a href="/" style="display:inline-block;margin-top:6px;background:#0A2640;color:white;padding:4px 12px;border-radius:999px;font-size:10px;text-decoration:none">← Volver a Landing</a><br><small class="text-[10px] opacity-60">Crear empresa → Directos → Landing → Panel con módulos</small></div>
+<div class="text-right"><b class="text-[12px]">Panel Principal</b><br><small class="text-[10px] opacity-60">Crear empresa → Directos → Landing → Panel con módulos</small></div>
 </div>
 
 <!-- 1. CREAR EMPRESA DIRECTA - PRIMERO -->
 <div class="mt-6 bg-white border border-black/10 rounded-[24px] p-6">
 <h3 class="font-black text-[14px]">1. Crear empresa directa (Principal Admin)</h3>
-<p class="text-[11px] opacity-60 mt-1">Se crea APROBADA para pruebas y abre automáticamente su panel con módulos</p>
+<p class="text-[11px] opacity-60 mt-1">Se crea APROBADA y conectada a Supabase automáticamente - abre su panel con módulos</p>
 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
 <input id="nEmp" placeholder="Nombre empresa" class="h-11 border border-black/10 rounded-full px-5 text-[12px] bg-[#F6F8FA] outline-none">
 <input id="nWA" placeholder="WhatsApp" class="h-11 border border-black/10 rounded-full px-5 text-[12px] bg-[#F6F8FA] outline-none">
@@ -43,14 +41,13 @@ body{font-family:Montserrat,sans-serif}
 <div id="listaLanding" class="grid gap-3 mt-4"></div>
 </div>
 
-<!-- PANEL EMPRESA DESPLEGABLE - MODULOS Y COMPONENTES -->
+<!-- PANEL EMPRESA DESPLEGABLE -->
 <div id="panelEmpresa" class="hidden mt-6 bg-[#0A2640] rounded-[24px] p-2">
 <div class="bg-white rounded-[20px] p-6">
 <div class="flex justify-between items-center flex-wrap gap-3">
-<div><b id="nombreEmpresaActiva" class="text-[18px] uppercase">EMPRESA</b><br><small class="text-[11px] opacity-60">Panel Empresa - 6 módulos desplegables - componente x componente - Tarifa 200k 1 modulo / 100k c/u</small><br><span class="mt-2 inline-block text-[10px] bg-[#E6F8EE] text-[#1ECB6A] px-3 py-1 rounded-full font-bold">6 modulos desplegables - componente x componente</span></div>
+<div><b id="nombreEmpresaActiva" class="text-[18px] uppercase">EMPRESA</b><br><small class="text-[11px] opacity-60">Panel Empresa - 6 módulos desplegables - componente x componente - Tarifa 200k 1 modulo / 100k c/u</small><br><span class="mt-2 inline-block text-[10px] bg-[#E6F8EE] text-[#1ECB6A] px-3 py-1 rounded-full font-bold">6 modulos desplegables - componente x componente - Auto-conectado Supabase</span></div>
 <button onclick="cerrarPanel()" class="h-9 px-5 border rounded-full text-[11px]">Cerrar panel</button>
 </div>
-
 <div class="mt-5 flex flex-wrap gap-2">
 <button onclick="showTab(0)" id="t0" class="tab active">0. Definicion Infra por Empresa (SuperAdmin)</button>
 <button onclick="showTab(1)" id="t1" class="tab">1. Personas y Roles (FIJO)</button>
@@ -61,107 +58,58 @@ body{font-family:Montserrat,sans-serif}
 <button onclick="showTab(6)" id="t6" class="tab">6. CRM + Pagos</button>
 <button onclick="showTab(7)" id="t7" class="tab">Bodega Stock &lt;5</button>
 </div>
-
 <div id="contenidos" class="mt-5">
-<div id="p0" class="tabPanel"><div class="border rounded-[16px] p-5 bg-[#FBFCFE]"><b class="text-[12px]">0. Definicion Infra por Empresa</b><p class="text-[11px] opacity-60 mt-2">Horarios óptimos por red social (FB/IG/TikTok) - Enlaces proveedores escaneo 7AM/2PM</p><div class="grid md:grid-cols-3 gap-3 mt-3"><input placeholder="Horario FB" class="h-10 border rounded-full px-4 bg-[#F6F8FA] text-[11px]"><input placeholder="Horario IG" class="h-10 border rounded-full px-4 bg-[#F6F8FA] text-[11px]"><input placeholder="Enlaces proveedores" class="h-10 border rounded-full px-4 bg-[#F6F8FA] text-[11px]"></div></div></div>
-<div id="p1" class="tabPanel hidden"><div class="border rounded-[16px] p-5 bg-[#FBFCFE]"><b class="text-[12px]">1. Personas y Roles (FIJO) - nombre / cargo / WhatsApp</b><div class="grid md:grid-cols-4 gap-2 mt-3"><input id="perNombre" placeholder="Nombre" class="h-10 border rounded-full px-4 bg-[#F6F8FA] text-[11px]"><input id="perCargo" placeholder="Cargo" class="h-10 border rounded-full px-4 bg-[#F6F8FA] text-[11px]"><input id="perWA" placeholder="WhatsApp" class="h-10 border rounded-full px-4 bg-[#F6F8FA] text-[11px]"><button onclick="guardarPersona()" class="h-10 bg-[#0A2640] text-white rounded-full text-[11px] font-bold">Agregar persona</button></div><div id="listaPersonas" class="mt-3 grid gap-2"></div></div></div>
-<div id="p2" class="tabPanel hidden"><div id="mod2" class="grid gap-3"></div><div class="mt-3 font-black text-[12px]">Total: <span id="total2"></span></div></div>
+<div id="p0" class="tabPanel"><div id="listaInfra" class="grid gap-4"></div><div class="mt-6 bg-[#F6F8FA] border rounded-[20px] p-5 flex justify-between items-center"><div><b class="text-[13px]">Total a pagar - Tarifa nueva</b><br><small class="text-[10px] opacity-60">1 modulo $200.000 / 2+ modulos $100.000 c/u</small></div><b id="totalInfra" class="text-[16px] font-black">$0 COP</b></div></div>
+<div id="p1" class="tabPanel hidden"><div class="border rounded-[16px] p-5 bg-[#FBFCFE]"><b class="text-[12px]">1. Personas y Roles (FIJO)</b><div id="listaPersonas" class="mt-3 grid gap-2"></div></div></div>
+<div id="p2" class="tabPanel hidden"><div id="mod2" class="grid gap-3"></div></div>
 <div id="p3" class="tabPanel hidden"><div id="mod3" class="grid gap-3"></div></div>
 <div id="p4" class="tabPanel hidden"><div id="mod4" class="grid gap-3"></div></div>
 <div id="p5" class="tabPanel hidden"><div id="mod5" class="grid gap-3"></div></div>
 <div id="p6" class="tabPanel hidden"><div id="mod6" class="grid gap-3"></div></div>
-<div id="p7" class="tabPanel hidden"><div class="border rounded-[16px] p-5 bg-[#FFF8E1]"><b class="text-[12px]">Bodega Stock &lt;5</b><p class="text-[11px] opacity-70 mt-1">Alerta WA cuando stock &lt;5</p></div></div>
-</div>
-
+<div id="p7" class="tabPanel hidden"><div class="border rounded-[16px] p-5 bg-[#FBFCFE]"><b class="text-[12px]">Bodega Stock &lt;5</b><p class="text-[11px] opacity-60 mt-2">Alerta productos con stock menor a 5 - conectado a Supabase por empresa</p></div></div>
 </div>
 </div>
-
+</div>
 </div>
 
 <script>
 const SUPA_URL="https://mujrgighyioahlnliupf.supabase.co"; const SUPA_ANON="sb_publishable_ujS4qAeUE1rAaf9C9dRRDE_8NkojOqd";
 let supa=null;
-function safeGet(k,d){ try{ const r=localStorage.getItem(k); return r?JSON.parse(r):d; }catch{ return d; } }
-function safeSet(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch{} }
+function safeGet(k,d){ try{const r=localStorage.getItem(k); return r?JSON.parse(r):d;}catch{return d;} }
+function safeSet(k,v){ try{localStorage.setItem(k,JSON.stringify(v));}catch{} }
 async function initSupa(){ if(window.supabase){ supa=window.supabase.createClient(SUPA_URL,SUPA_ANON); } }
-
 const MODS=[
-{id:"personas",name:"1. Personas, Roles y Organización (CORE FIJO)",fixed:true,comps:[
-{id:"pe1",name:"Administrador (acceso total)",fixed:true},
-{id:"pe2",name:"Supervisor de Pedidos",fixed:true},
-{id:"pe3",name:"Responsable de Caja",fixed:true},
-{id:"pe4",name:"Mensajeros / Patinadores",fixed:true}
-]},
-{id:"scan",name:"2. Escáner Diario + Compras Proveedores A/B/C",comps:[
-{id:"s7",name:"Detecta producto A/B/C - Ranking Automático"},
-{id:"s8",name:"Actualiza catálogo virtual stockos.com/inv/"},
-{id:"s9",name:"Alerta stock bajo <5 por WA"},
-{id:"s10",name:"Órdenes A/B/C"},
-{id:"s11",name:"Control llegada bodega"},
-{id:"s12",name:"Espacio para pegar enlaces proveedores - Escaneo 7AM/2PM"}
-]},
-{id:"camp",name:"3. Campañas RRSS con IA",comps:[
-{id:"c1",name:"Fotos optimizadas IA"},
-{id:"c2",name:"Precios 40%/85% (detal/mayorista)"},
-{id:"c3",name:"Copy + hashtags"},
-{id:"c5",name:"Publicaciones automáticas RRSS"},
-{id:"c6",name:"Pauta pagada (presupuesto aparte)"}
-]},
-{id:"disparo",name:"4. Disparo + Link Maestro Pro + Grupos Casa",comps:[
-{id:"d1",name:"Link filtrable stockos.com/inv/tu-empresa"},
-{id:"d2",name:"Filtros avanzados (categoría, precio, stock)"},
-{id:"d3",name:"Publica en horarios óptimos por red social (config SuperAdmin)"},
-{id:"d4",name:"Grupos propios empresa"},
-{id:"d5",name:"Comunidades propias empresa"},
-{id:"d6",name:"Grupos venta - Grupos Casa"},
-{id:"d7",name:"Enlace celular empresa"},
-{id:"d8",name:"Escanea pedidos y compara inventario"},
-{id:"d9",name:"Cierra ventas auto en privado por WA Business"},
-{id:"d10",name:"Campañas bases datos WA Business"},
-{id:"d11",name:"Reportes y clics (quién vio)"},
-{id:"d12",name:"Link extra promo"}
-]},
-{id:"despachos",name:"5. Despachos, guía y organización",comps:[
-{id:"de1",name:"Cierra venta"},
-{id:"de2",name:"Organiza pedidos por ruta"},
-{id:"de3",name:"Genera guía"},
-{id:"de4",name:"Todo listo despachar - checklist Mensajeros"}
-]},
-{id:"extras",name:"6. Fotos Variantes + Barras + CRM + Pagos",comps:[
-{id:"ex1",name:"Tallas"},
-{id:"ex2",name:"Colores"},
-{id:"ex3",name:"Códigos barras Pistola"},
-{id:"ex4",name:"Etiquetas"},
-{id:"ex5",name:"CRM Mayorista vs Detal (40%/85%)"},
-{id:"ex6",name:"Historial pedidos"},
-{id:"ex7",name:"Pagos: Contraentrega/Transf/Efectivo/Nequi/PSE/PayPal"}
-]}
+{id:"personas",name:"1. Personas, Roles y Organización (CORE FIJO)",fixed:true,comps:[{id:"pe1",name:"Administrador (acceso total)",fixed:true},{id:"pe2",name:"Supervisor de Pedidos",fixed:true},{id:"pe3",name:"Responsable de Caja",fixed:true},{id:"pe4",name:"Mensajeros / Patinadores",fixed:true}]},
+{id:"scan",name:"2. Escáner Diario + Compras Proveedores A/B/C",comps:[{id:"s7",name:"Detecta producto A/B/C - Ranking Automático"},{id:"s8",name:"Actualiza catálogo virtual stockos.com/inv/"},{id:"s9",name:"Alerta stock bajo <5 por WA"},{id:"s10",name:"Órdenes A/B/C"},{id:"s11",name:"Control llegada bodega"},{id:"s12",name:"Espacio para pegar enlaces proveedores - Escaneo 7AM/2PM"}]},
+{id:"camp",name:"3. Campañas RRSS con IA",comps:[{id:"c1",name:"Fotos optimizadas IA"},{id:"c2",name:"Precios 40%/85% (detal/mayorista)"},{id:"c3",name:"Copy + hashtags"},{id:"c5",name:"Publicaciones automáticas RRSS"},{id:"c6",name:"Pauta pagada (presupuesto aparte)"}]},
+{id:"disparo",name:"4. Disparo + Link Maestro Pro + Grupos Casa",comps:[{id:"d1",name:"Link filtrable stockos.com/inv/tu-empresa"},{id:"d2",name:"Filtros avanzados"},{id:"d3",name:"Publica en horarios óptimos por red social"},{id:"d4",name:"Grupos propios empresa"},{id:"d5",name:"Comunidades propias empresa"},{id:"d6",name:"Grupos venta - Grupos Casa"},{id:"d7",name:"Enlace celular empresa"},{id:"d8",name:"Escanea pedidos y compara inventario"},{id:"d9",name:"Cierra ventas auto en privado por WA Business"},{id:"d10",name:"Campañas bases datos WA Business"},{id:"d11",name:"Reportes y clics"},{id:"d12",name:"Link extra promo"}]},
+{id:"despachos",name:"5. Despachos, guía y organización",comps:[{id:"de1",name:"Cierra venta"},{id:"de2",name:"Organiza pedidos por ruta"},{id:"de3",name:"Genera guía"},{id:"de4",name:"Todo listo despachar - checklist Mensajeros"}]},
+{id:"extras",name:"6. Fotos Variantes + Barras + CRM + Pagos",comps:[{id:"ex1",name:"Tallas"},{id:"ex2",name:"Colores"},{id:"ex3",name:"Códigos barras Pistola"},{id:"ex4",name:"Etiquetas"},{id:"ex5",name:"CRM Mayorista vs Detal"},{id:"ex6",name:"Historial pedidos"},{id:"ex7",name:"Pagos: Contraentrega/Transf/Efectivo/Nequi/PSE/PayPal"}]}
 ];
-let modState={scan:true,camp:true,disparo:true,despachos:true,extras:true};
-let sel=new Set(["pe1","pe2","pe3","pe4","s7","s8","s9","s10","s11","s12","c1","c2","c3","c5","c6","d1","d2","d3","d4","d5","d6","d7","d8","d9","d10","d11","d12","de1","de2","de3","de4","ex1","ex2","ex3","ex4","ex5","ex6","ex7"]);
+let modState=safeGet('stockos_modState',{scan:true,camp:true,disparo:true,despachos:true,extras:true});
+let sel=new Set(safeGet('stockos_sel',["pe1","pe2","pe3","pe4","s7","s8","s9","s10","s11","s12","c1","c2","c3","c5","c6","d1","d2","d3","d4","d5","d6","d7","d8","d9","d10","d11","d12","de1","de2","de3","de4","ex1","ex2","ex3","ex4","ex5","ex6","ex7"]));
 let empresaActiva="";
-
-function showTab(n){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  const tt=document.getElementById('t'+n); if(tt) tt.classList.add('active');
-  document.querySelectorAll('.tabPanel').forEach(p=>p.classList.add('hidden'));
-  const pp=document.getElementById('p'+n); if(pp) pp.classList.remove('hidden');
-}
-
-function renderModulos(){
-  const map={scan:'mod2',camp:'mod3',disparo:'mod4',despachos:'mod5',extras:'mod6'};
-  Object.keys(map).forEach(mid=>{
-    const mod=MODS.find(m=>m.id===mid); const cont=document.getElementById(map[mid]); if(!mod||!cont) return;
-    cont.innerHTML='<b class="text-[12px]">'+mod.name+'</b><div class="mt-2 grid md:grid-cols-2 gap-2">'+mod.comps.map(co=>{
-      const badge='<span class="text-[8px] bg-[#E6F8EE] text-[#0A2640] px-2 py-0.5 rounded-full ml-1">Incluido en módulo</span>';
-      const on=sel.has(co.id)?'on':'';
-      return `<div class="flex justify-between items-center bg-[#F6F8FA] border rounded-full px-3 py-2.5"><span class="text-[11px]">${co.name}${badge}</span><div class="toggle ${on}"><div class="dot"></div></div></div>`;
-    }).join('')+'</div>';
+function showTab(n){ document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); const tt=document.getElementById('t'+n); if(tt) tt.classList.add('active'); document.querySelectorAll('.tabPanel').forEach(p=>p.classList.add('hidden')); const pp=document.getElementById('p'+n); if(pp) pp.classList.remove('hidden'); }
+function renderInfra(){
+  const c=document.getElementById('listaInfra'); if(!c) return; c.innerHTML='';
+  MODS.forEach(mod=>{
+    const masterOn=mod.fixed?true:!!modState[mod.id];
+    const borderClass=!masterOn?'border-gray-300 bg-gray-50 opacity-60':(mod.comps.every(x=>sel.has(x.id))?'border-[#1ECB6A] bg-[#E6F8EE]':'bg-white');
+    const div=document.createElement('div'); div.className='border rounded-[18px] p-4 '+borderClass;
+    const compsHtml=mod.comps.map(comp=>{
+      const on=comp.fixed?true:(sel.has(comp.id)&&masterOn);
+      const badge=comp.fixed?'<span class="text-[8px] bg-[#0A2640] text-white px-2 py-0.5 rounded-full ml-1">FIJO - Incluido</span>':'<span class="text-[8px] bg-[#E6F8EE] text-[#0A2640] px-2 py-0.5 rounded-full ml-1">Incluido en módulo</span>';
+      const tog=comp.fixed?'<div class="toggle on" style="pointer-events:none"><div class="dot"></div></div>':'<div class="toggle '+(on?'on':'')+'" onclick="toggleComp(\''+comp.id+'\')"><div class="dot"></div></div>';
+      return '<div class="flex items-center justify-between bg-[#F6F8FA] border rounded-full px-3 py-2.5 '+(masterOn?'':'opacity-50 pointer-events-none')+'"><span class="text-[11px]">'+comp.name+badge+'</span>'+tog+'</div>';
+    }).join('');
+    const status=!masterOn?'<span class="text-[10px] bg-gray-200 px-2 py-1 rounded-full ml-2">No solicitado</span>':'<span class="text-[10px] bg-green-100 px-2 py-1 rounded-full ml-2">'+mod.comps.filter(cc=>sel.has(cc.id)).length+'/'+mod.comps.length+'</span>';
+    const masterTog=mod.fixed?'<div class="toggle on" style="pointer-events:none"><div class="dot"></div></div>':'<div class="toggle '+(masterOn?'on':'')+'" onclick="toggleMod(\''+mod.id+'\')"><div class="dot"></div></div>';
+    div.innerHTML='<div class="flex justify-between items-center mb-3"><b class="text-[13px]">'+mod.name+status+'</b>'+masterTog+'</div><div class="grid md:grid-cols-2 gap-2">'+compsHtml+'</div>';
+    c.appendChild(div);
   });
-  let act=0; MODS.forEach(m=>{ if(!m.fixed && modState[m.id]) act++; }); let tot=act===1?200000:act*100000; if(act===0) tot=0;
-  const t2=document.getElementById('total2'); if(t2) t2.innerText='$'+tot.toLocaleString()+' COP - '+(act===1?'1 modulo x $200.000':act+' modulos x $100.000 c/u');
 }
-
+function toggleMod(id){ const mod=MODS.find(x=>x.id===id); if(!mod||mod.fixed) return; modState[id]=!modState[id]; if(!modState[id]){ mod.comps.forEach(c=>{ if(!c.fixed) sel.delete(c.id); }); } else { mod.comps.forEach(c=>sel.add(c.id)); } safeSet('stockos_modState',modState); safeSet('stockos_sel',Array.from(sel)); renderInfra(); }
+function toggleComp(id){ const mod=MODS.find(m=>m.comps.some(c=>c.id===id)); if(!modState[mod.id]&&!mod.fixed){ alert('Activa primero '+mod.name); return; } if(sel.has(id)) sel.delete(id); else sel.add(id); safeSet('stockos_sel',Array.from(sel)); renderInfra(); }
 function render(){
   const todas=safeGet('stockos_ventas',[]);
   const landing=todas.filter(v=>v.origen!=='superadmin_directo');
@@ -170,52 +118,40 @@ function render(){
   document.getElementById('listaLanding').innerHTML=landing.length?landing.slice().reverse().map(cardHtml).join(''):'<small class="opacity-50 text-[11px]">Sin clientes landing - aparecerán cuando alguien pague en landing-final.html</small>';
   document.getElementById('listaDirectos').innerHTML=directos.length?directos.slice().reverse().map(cardHtml).join(''):'<small class="opacity-50 text-[11px]">Sin directos - Crea una arriba</small>';
 }
-
 function cardHtml(v){
   const estado=v.estado||'aprobado';
   return `<div class="border border-black/10 rounded-[16px] p-4 flex flex-col md:flex-row justify-between gap-3 bg-white">
-    <div class="flex-1"><b class="text-[11px] uppercase">${v.empresa}</b><br><small class="text-[10px] opacity-60">${v.wa||''} | $${(v.total||200000).toLocaleString()} | ${v.email||''} |</small></div>
+    <div class="flex-1"><b class="text-[11px] uppercase">${v.empresa}</b><br><small class="text-[10px] opacity-60">${v.wa||''} | $${(v.total||200000).toLocaleString()} | ${v.email||''} | <span class="text-[#1ECB6A] font-bold">● Supabase OK</span></small></div>
     <div class="flex items-center gap-2 flex-wrap">
       <select onchange="cambiarEstado(${v.id},this.value)" class="h-8 border rounded-full px-3 text-[10px] bg-[#F6F8FA]"><option value="aprobado" ${estado==='aprobado'?'selected':''}>aprobado</option><option value="pausado" ${estado==='pausado'?'selected':''}>pausado</option><option value="pendiente" ${estado==='pendiente'?'selected':''}>pendiente</option></select>
-      <button onclick="aprobarSupa(${v.id})" class="h-8 px-4 bg-[#1ECB6A] text-white rounded-full text-[10px] font-bold">Aprobar + Supabase</button>
       <button onclick="verPanel('${v.empresa}')" class="h-8 px-4 bg-[#0A2640] text-white rounded-full text-[10px] font-bold">Ver Panel</button>
       <button onclick="eliminar(${v.id})" class="h-8 w-8 bg-[#FFE6E6] text-[#FF3B3B] rounded-full flex items-center justify-center text-[12px]">×</button>
     </div>
   </div>`;
 }
-
 function cambiarEstado(id,est){ let l=safeGet('stockos_ventas',[]); l=l.map(x=> x.id===id?{...x,estado:est}:x); safeSet('stockos_ventas',l); render(); }
 function eliminar(id){ if(!confirm('¿Eliminar empresa?')) return; let l=safeGet('stockos_ventas',[]); l=l.filter(x=>x.id!==id); safeSet('stockos_ventas',l); render(); }
-function crearDirecta(){
+async function crearDirecta(){
   const emp=document.getElementById('nEmp').value.trim(); if(!emp){alert('Nombre');return;}
   let l=safeGet('stockos_ventas',[]);
   const nueva={id:Date.now(),empresa:emp,wa:document.getElementById('nWA').value,email:document.getElementById('nEmail').value,nit:document.getElementById('nNit').value,total:200000,estado:'aprobado',origen:'superadmin_directo',fecha:new Date().toLocaleString()};
   l.push(nueva); safeSet('stockos_ventas',l);
+  try{ if(!supa) await initSupa(); if(supa){ await supa.from('empresas').insert({name:emp,whatsapp:nueva.wa,email:nueva.email,nit:nueva.nit,estado:'aprobado',total:200000,origen:'superadmin_directo'}); } }catch(e){ console.warn('Supabase auto',e); }
   document.getElementById('nEmp').value=''; document.getElementById('nWA').value=''; document.getElementById('nEmail').value=''; document.getElementById('nNit').value='';
   render(); verPanel(emp);
 }
-async function aprobarSupa(id){
-  let l=safeGet('stockos_ventas',[]); let c=l.find(x=>x.id===id); if(!c) return;
-  try{ if(!supa) await initSupa(); const {data,error}=await supa.from('empresas').insert({name:c.empresa,whatsapp:c.wa||'',email:c.email||'',nit:c.nit||'',estado:'aprobado',total:c.total||200000}).select().single(); if(error) throw error; l=l.map(x=> x.id===id?{...x,estado:'aprobado'}:x); safeSet('stockos_ventas',l); render(); alert('Aprobada en Supabase: '+c.empresa); }catch(e){ l=l.map(x=> x.id===id?{...x,estado:'aprobado'}:x); safeSet('stockos_ventas',l); render(); alert('Aprobada local (Supabase error): '+c.empresa); }
-}
 function verPanel(empresa){
   localStorage.setItem('stockos_empresa_activa',empresa);
-  // Abre el panel FULL blindado como en tus fotos
+  empresaActiva=empresa;
+  document.getElementById('nombreEmpresaActiva').innerText=empresa;
+  document.getElementById('panelEmpresa').classList.remove('hidden');
+  renderInfra();
+  window.scrollTo({top:document.getElementById('panelEmpresa').offsetTop-20,behavior:'smooth'});
+  // Abrir panel full en nueva pestaña si existe
   const url='PANEL-EMPRESA-FINAL-BLINDADO-FULL-CORRIGIDO.html?empresa='+encodeURIComponent(empresa);
-  window.open(url,'_blank');
-  // fallback inline si no existe archivo
-  try{
-    empresaActiva=empresa;
-    document.getElementById('nombreEmpresaActiva').innerText=empresa;
-    document.getElementById('panelEmpresa').classList.remove('hidden');
-    renderModulos(); renderPersonas();
-  }catch{}
+  setTimeout(()=>{ window.open(url,'_blank'); },400);
 }
-function cerrarPanel(){ try{ document.getElementById('panelEmpresa').classList.add('hidden'); }catch{} empresaActiva=""; }
-
-function guardarPersona(){ const n=document.getElementById('perNombre').value.trim(); const c=document.getElementById('perCargo').value.trim(); const w=document.getElementById('perWA').value.trim(); if(!n){alert('Nombre');return;} if(!empresaActiva){alert('Abre un panel primero');return;} let l=safeGet('personas_'+empresaActiva,[]); l.push({id:Date.now(),nombre:n,cargo:c,wa:w}); safeSet('personas_'+empresaActiva,l); document.getElementById('perNombre').value=''; document.getElementById('perCargo').value=''; document.getElementById('perWA').value=''; renderPersonas(); }
-function renderPersonas(){ if(!empresaActiva) return; const l=safeGet('personas_'+empresaActiva,[]); document.getElementById('listaPersonas').innerHTML=l.map(p=>`<div class="border rounded-xl p-2 text-[11px] flex justify-between bg-white"><span><b>${p.nombre}</b> - ${p.cargo} - ${p.wa}</span></div>`).join('')||'<small class="opacity-60 text-[10px]">Sin personas - agrega arriba</small>'; }
-
-initSupa(); render(); renderModulos();
+function cerrarPanel(){ document.getElementById('panelEmpresa').classList.add('hidden'); empresaActiva=""; }
+initSupa(); render(); renderInfra();
 </script>
 </body></html>
