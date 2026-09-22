@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>STOCKOS Panel Empresa - FINAL 7 CAPAS + BODEGA PISTOLA</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700;800;900&display=swap" rel="stylesheet">
+<style>
+body{font-family:Montserrat,sans-serif}
+.tab{border:1px solid #e5e7eb;border-radius:999px;padding:8px 14px;font-size:11px;font-weight:700;cursor:pointer;background:white}
+.tab.active{background:#0A2640;color:white;border-color:#0A2640}
+.toggle{width:42px;height:24px;background:#E5E7EB;border-radius:999px;position:relative;cursor:pointer;transition:.2s;flex-shrink:0}
+.toggle.on{background:#1ECB6A} .toggle .dot{width:20px;height:20px;background:white;border-radius:50%;position:absolute;top:2px;left:2px;transition:.2s}
+.toggle.on .dot{left:20px}
+@media print { .no-print{display:none} .print-area{display:block} }
+</style>
+</head><body class="bg-[#F6F8FA] text-[#0A2640]">
+<div class="max-w-[1200px] mx-auto p-4">
+<div class="bg-white border rounded-[20px] p-5 flex justify-between flex-wrap gap-3">
+<div><b id="nombreEmpresa" class="text-[18px] uppercase">EMPRESA</b><br><small class="text-[11px] opacity-60">Panel Empresa Final - 6 modulos + Bodega - N8N + WA API Ready - Empresa aislada</small></div>
+<div class="flex gap-2">
+
+[... 281 lines truncated ...]
+
+function crearReferenciaBodega(){
+const ref=document.getElementById('b_ref').value.trim().toUpperCase();
+const nombre=document.getElementById('b_nombre').value.trim();
+const tallasRaw=document.getElementById('b_tallas').value.trim();
+if(!ref||!nombre){ alert('Pon REF y Nombre'); return; }
+const tallas = tallasRaw ? tallasRaw.split(',').map(t=>t.trim().toUpperCase()).filter(Boolean) : ['UNICA'];
+let bodega=getBodega();
+if(bodega.some(b=>b.ref===ref)){ alert('REF ya existe'); return; }
+const items = tallas.map(t=>{
+const barcode = `${ref}-${t}`.replace(/\s+/g,'');
+return {talla:t, cantidad:0, barcode};
+});
+bodega.push({id:Date.now(), ref, nombre, tallas: items, created:new Date().toLocaleString()});
+setBodega(bodega);
+document.getElementById('b_ref').value=''; document.getElementById('b_nombre').value=''; document.getElementById('b_tallas').value='';
+renderBodega();
+alert('REF '+ref+' creada con '+tallas.length+' tallas - Bodega propia '+emp);
+}
+
+function renderBodega(){
+const bodega=getBodega();
+const cont=document.getElementById('listaBodega');
+if(!cont) return;
+if(!bodega.length){ cont.innerHTML='<small class="opacity-50">Sin referencias - Crea REF propia arriba</small>'; renderBarras(); return; }
+cont.innerHTML=bodega.map(b=>{
+const total = b.tallas.reduce((s,t)=>s+ (t.cantidad||0),0);
+const tallasHtml = b.tallas.map(t=>`<div class="flex justify-between items-center bg-[#F6F8FA] rounded-full px-3 py-1.5 mt-1"><span class="text-[10px]"><b>${t.talla}</b> - Stock: ${t.cantidad} - <span class="font-mono text-[9px]">${t.barcode}</span></span><div class="flex gap-1"><button onclick="ajustarStock('${b.ref}','${t.talla}',1)" class="h-6 w-6 bg-[#1ECB6A] text-white rounded-full">+</button><button onclick="ajustarStock('${b.ref}','${t.talla}',-1)" class="h-6 w-6 bg-[#FF3B3B] text-white rounded-full">-</button></div></div>`).join('');
+return `<div class="border rounded-[12px] p-3 bg-white"><div class="flex justify-between"><b class="text-[11px]">${b.ref} - ${b.nombre}</b><span class="text-[10px] bg-[#0A2640] text-white px-2 py-0.5 rounded-full">Total ${total}</span></div>${tallasHtml}<div class="mt-2 flex gap-1"><button onclick="eliminarRef('${b.ref}')" class="h-6 px-2 border rounded-full text-[9px]">Eliminar</button></div></div>`;
+}).join('');
+renderBarras();
+renderKardex();
+}
+
+function ajustarStock(ref,talla,delta){
+let bodega=getBodega();
+const item=bodega.find(b=>b.ref===ref);
+if(!item) return;
+const t=item.tallas.find(x=>x.talla===talla);
+if(!t) return;
+t.cantidad=Math.max(0, (t.cantidad||0)+delta);
+setBodega(bodega);
+// kardex
+let kardex=getKardex();
+kardex.unshift({fecha:new Date().toLocaleString(), ref, talla, tipo: delta>0?'ENTRADA':'SALIDA', cantidad: Math.abs(delta), stock: t.cantidad, barcode: t.barcode});
+if(kardex.length>200) kardex=kardex.slice(0,200);
+setKardex(kardex);
+renderBodega();
+}
+
+function eliminarRef(ref){
+if(!confirm('Eliminar REF '+ref+'?')) return;
+let bodega=getBodega().filter(b=>b.ref!==ref);
+setBodega(bodega);
+renderBodega();
+}
+
+function renderBarras(){
+const bodega=getBodega();
+const grid=document.getElementById('gridBarras');
+if(!grid) return;
+grid.innerHTML='';
+bodega.forEach(b=>{
+b.tallas.forEach(t=>{
+const div=document.createElement('div');
+div.className='border rounded-[12px] p-2 bg-[#F6F8FA] text-center';
+div.innerHTML=`<small class="text-[9px] font-bold">${b.ref} - ${t.talla} - ${b.nombre}</small><br><svg class="barcode" data-code="${t.barcode}"></svg><small class="text-[8px] font-mono">${t.barcode} - Stock ${t.cantidad}</small>`;
+grid.appendChild(div);
+});
+});
+// generar barras con JsBarcode
+setTimeout(()=>{
+document.querySelectorAll('.barcode').forEach(el=>{
+try{ JsBarcode(el, el.dataset.code, {format:'CODE128', width:1.5, height:40, displayValue:false}); }catch(e){}
+});
+},100);
+}
+
+function imprimirBarras(){
+renderBarras();
+setTimeout(()=>window.print(), 500);
+}
+
+function exportarCSV(){
+const bodega=getBodega();
+let csv='REF,Nombre,Talla,Barcode,Cantidad,Empresa\n';
+bodega.forEach(b=>{ b.tallas.forEach(t=>{ csv+=`${b.ref},${b.nombre},${t.talla},${t.barcode},${t.cantidad},${emp}\n`; }); });
+const blob=new Blob([csv],{type:'text/csv'});
+const url=URL.createObjectURL(blob);
+const a=document.createElement('a'); a.href=url; a.download=`bodega_${emp}_${Date.now()}.csv`; a.click();
+}
+
+function renderKardex(){
+const kardex=getKardex();
+const cont=document.getElementById('kardexLista');
+if(!cont) return;
+if(!kardex.length){ cont.innerHTML='<small class="opacity-50">Sin movimientos pistola aun</small>'; return; }
+cont.innerHTML=kardex.slice(0,50).map(k=>`<div class="flex justify-between border-b py-1"><span><b>${k.tipo}</b> ${k.ref}-${k.talla} x${k.cantidad} -> Stock ${k.stock}</span><span class="opacity-60">${k.fecha}</span></div>`).join('');
+}
+
+// Pistola escáner - detecta ENTER
+document.addEventListener('DOMContentLoaded', ()=>{
+const inp=document.getElementById('inputPistola');
+if(inp){
+inp.addEventListener('keydown', (e)=>{
+if(e.key==='Enter'){
+const code=e.target.value.trim();
+if(!code) return;
+procesarEscaneoPistola(code);
+e.target.value='';
+}
+});
+}
+renderBodega();
+});
+
+function procesarEscaneoPistola(code){
+const bodega=getBodega();
+let encontrado=null; let refEnc=null;
+for(const b of bodega){
+const t=b.tallas.find(x=>x.barcode===code || x.barcode.toUpperCase()===code.toUpperCase() || `${b.ref}-${x.talla}`===code);
+if(t){ encontrado=t; refEnc=b; break; }
+}
+const res=document.getElementById('resultadoPistola');
+if(!encontrado){
+res.innerHTML=`<span class="text-[#FF3B3B]">❌ Código no encontrado: <b>${code}</b> - Crea REF primero</span>`;
+return;
+}
+// ajustar según modo
+const delta = modoPistola==='entrada'?1:-1;
+ajustarStock(refEnc.ref, encontrado.talla, delta);
+res.innerHTML=`<span class="${delta>0?'text-[#1ECB6A]':'text-[#FF3B3B]'}"><b>${modoPistola.toUpperCase()} OK</b> - ${refEnc.ref} ${encontrado.talla} - Stock ahora ${encontrado.cantidad+delta} - ${code}</span><br><small>${refEnc.nombre} - Empresa ${emp}</small>`;
+}
+
+// Inicializar bodega al cargar
+renderBodega();
+
+// Cargar links si existen
+// Cargar links si existen
+const savedLinks=safeGet('stockos_links_'+emp,''); if(savedLinks) document.getElementById('linksProveedores').value=savedLinks;
+</script>
+</body></html>

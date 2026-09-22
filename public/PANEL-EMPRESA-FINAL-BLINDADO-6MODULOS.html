@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>STOCKOS Panel Empresa - FINAL 7 CAPAS + BODEGA PISTOLA</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700;800;900&display=swap" rel="stylesheet">
+<style>
+body{font-family:Montserrat,sans-serif}
+.tab{border:1px solid #e5e7eb;border-radius:999px;padding:8px 14px;font-size:11px;font-weight:700;cursor:pointer;background:white}
+.tab.active{background:#0A2640;color:white;border-color:#0A2640}
+.toggle{width:42px;height:24px;background:#E5E7EB;border-radius:999px;position:relative;cursor:pointer;transition:.2s;flex-shrink:0}
+.toggle.on{background:#1ECB6A} .toggle .dot{width:20px;height:20px;background:white;border-radius:50%;position:absolute;top:2px;left:2px;transition:.2s}
+.toggle.on .dot{left:20px}
+@media print { .no-print{display:none} .print-area{display:block} }
+</style>
+</head><body class="bg-[#F6F8FA] text-[#0A2640]">
+<div class="max-w-[1200px] mx-auto p-4">
+<div class="bg-white border rounded-[20px] p-5 flex justify-between flex-wrap gap-3">
+<div><b id="nombreEmpresa" class="text-[18px] uppercase">EMPRESA</b><br><small class="text-[11px] opacity-60">Panel Empresa Final - 6 modulos + Bodega - N8N + WA API Ready - Empresa aislada</small></div>
+<div class="flex gap-2">
+<button onclick="window.location.href='#'" class="h-8 px-4 border rounded-full text-[10px] font-bold">Landing</button>
+<button onclick="window.location.href='#'" class="h-8 px-4 bg-[#0A2640] text-white rounded-full text-[10px] font-bold">SuperAdmin</button>
+</div>
+</div>
+
+<div class="mt-4 bg-white border rounded-[20px] p-3 flex flex-wrap gap-2">
+<button onclick="showTab(0)" id="t0" class="tab active">0. Definicion Infra por Empresa</button>
+<button onclick="showTab(1)" id="t1" class="tab">1. Personas y Roles</button>
+<button onclick="showTab(2)" id="t2" class="tab">2. Escaner A/B/C</button>
+<button onclick="showTab(3)" id="t3" class="tab">3. Campañas IA</button>
+<button onclick="showTab(4)" id="t4" class="tab">4. Disparo + Link</button>
+<button onclick="showTab(5)" id="t5" class="tab">5. Despachos</button>
+<button onclick="showTab(6)" id="t6" class="tab">6. CRM + Pagos</button>
+<button onclick="showTab(7)" id="t7" class="tab">7. Bodega Stock <5</button>
+</div>
+
+<!-- 0. DEFINICION INFRA - MISMO DESPLEGABLE LANDING -->
+<div id="p0" class="tabPanel mt-4">
+<div class="bg-white border rounded-[20px] p-6">
+<b class="text-[13px]">0. Definicion Infra - Empresa: <span id="emp0"></span> - Independiente</b>
+<p class="text-[11px] opacity-60 mt-1">Mismo desplegable de la landing - Cada modulo y cada componente con ON/OFF independiente. Solo esta pestaña controla que se activa. Guarda en <span class="emp"></span>.</p>
+<div id="infraLandingContainer" class="mt-4"></div>
+<div class="mt-4 flex gap-3 flex-wrap">
+<button onclick="guardarInfra()" class="h-10 px-6 bg-[#1ECB6A] text-white rounded-full text-[11px] font-black">Guardar Infra <span class="emp"></span></button>
+<button onclick="probarN8N()" class="h-10 px-6 border rounded-full text-[11px] font-bold">Probar N8N Webhook</button>
+<button onclick="probarWA()" class="h-10 px-6 border rounded-full text-[11px] font-bold">Probar WA API</button>
+<small class="text-[10px] opacity-60 self-center">$100.000 x módulo - CORE fijo incluido</small>
+</div>
+</div>
+</div>
+
+<!-- 1. PERSONAS -->
+<div id="p1" class="tabPanel hidden mt-4">
+<div class="bg-white border rounded-[20px] p-6">
+<b class="text-[13px]">1. Personas y Roles - <span class="emp"></span> (FIJO)</b>
+<div id="listaPersonas" class="mt-3 grid gap-2"></div>
+<div class="mt-4 border rounded-[16px] p-4 bg-[#F6F8FA] grid md:grid-cols-4 gap-3">
+<input id="perNombre" placeholder="Nombre" class="h-10 border rounded-full px-4 text-[11px]">
+<input id="perRol" placeholder="Rol" class="h-10 border rounded-full px-4 text-[11px]">
+<input id="perWA" placeholder="WA" class="h-10 border rounded-full px-4 text-[11px]">
+<button onclick="agregarPersona()" class="h-10 bg-[#0A2640] text-white rounded-full text-[11px] font-bold">+ Agregar</button>
+</div>
+</div>
+</div>
+
+<!-- 2. ESCANER -->
+<div id="p2" class="tabPanel hidden mt-4">
+<div class="bg-white border rounded-[20px] p-6">
+<b class="text-[13px]">2. Escaner A/B/C - <span class="emp"></span></b>
+<p class="text-[11px] opacity-60">Pega enlaces proveedores - Escaneo 7AM/2PM - N8N listo</p>
+<div class="mt-4 grid gap-3">
+<textarea id="linksProveedores" placeholder="Pega aquí enlaces de inventarios proveedores - 1 por linea - Se escanean 7AM/2PM" class="w-full h-32 border rounded-[16px] p-4 text-[11px] bg-[#F6F8FA]"></textarea>
+<div class="flex gap-2 flex-wrap">
+<button onclick="guardarLinks()" class="h-10 px-6 bg-[#0A2640] text-white rounded-full text-[11px] font-bold">Guardar Enlaces <span class="emp"></span></button>
+<button onclick="ejecutarEscaner()" class="h-10 px-6 bg-[#1ECB6A] text-white rounded-full text-[11px] font-bold">Ejecutar Escaner Ahora (Test)</button>
+<span class="text-[10px] opacity-60 self-center">Webhook N8N: stockos_escaner_<span class="emp"></span></span>
+</div>
+<div id="resultadoEscaner" class="mt-4 border rounded-[16px] p-4 bg-[#FBFCFE] text-[11px]">Sin escaneos aún - Aqui aparecerán pruebas diarias del escaner para crear catálogo</div>
+</div>
+</div>
+</div>
+
+<!-- 3. CAMPAÑAS -->
+<div id="p3" class="tabPanel hidden mt-4">
+<div class="bg-white border rounded-[20px] p-6">
+<b class="text-[13px]">3. Campañas IA - <span class="emp"></span></b><br><small class="text-[11px] opacity-60">Fotos Pro IA, precios 40/85, copy, link - WA API</small>
+<div class="mt-4 grid md:grid-cols-3 gap-3">
+<div class="border rounded-xl p-4 bg-[#F6F8FA]"><b class="text-[11px]">Generar Campaña IA</b><div class="mt-2"><button class="h-9 w-full bg-[#0A2640] text-white rounded-full text-[10px]">Generar Fotos + Copy</button></div></div>
+<div class="border rounded-xl p-4 bg-[#F6F8FA]"><b class="text-[11px]">Estado N8N</b><div class="mt-2 text-[10px]">Conectado - WA API Ready</div></div>
+<div class="border rounded-xl p-4 bg-[#F6F8FA]"><b class="text-[11px]">Catálogo <span class="emp"></span></b><div class="mt-2 text-[10px]">stockos.com/inv/<span class="emp"></span></div></div>
+</div>
+</div>
+</div>
+
+<!-- 4. DISPARO -->
+<div id="p4" class="tabPanel hidden mt-4">
+<div class="bg-white border rounded-[20px] p-6">
+<b class="text-[13px]">4. Disparo + Link Maestro - <span class="emp"></span></b>
+<div class="mt-4 border rounded-xl p-4 bg-[#FBFCFE]">
+<b class="text-[11px]">Link filtrable</b><br><small class="text-[10px]">stockos.com/inv/<span class="emp"></span> - Filtros avanzados - Hora pico - Cierre auto WA</small>
+<div class="mt-3"><button class="h-10 px-6 bg-[#0A2640] text-white rounded-full text-[11px] font-bold">Copiar Link Maestro</button></div>
+</div>
+</div>
+</div>
+
+<!-- 5. DESPACHOS -->
+<div id="p5" class="tabPanel hidden mt-4">
+<div class="bg-white border rounded-[20px] p-6">
+<b class="text-[13px]">5. Despachos - <span class="emp"></span></b>
+<table class="mt-4 w-full text-[11px] border"><tr class="bg-[#F6F8FA]"><th class="p-2 border">Cliente</th><th class="p-2 border">Valor</th><th class="p-2 border">Proveedor</th><th class="p-2 border">Guía</th><th class="p-2 border">Mensajero</th></tr><tr><td class="p-2 border">Juan - Cali</td><td class="p-2 border">$245.000</td><td class="p-2 border">MAXIMA</td><td class="p-2 border">INTER 123</td><td class="p-2 border">Carlos</td></tr></table>
+</div>
+</div>
+
+<!-- 6. CRM -->
+<div id="p6" class="tabPanel hidden mt-4">
+<div class="bg-white border rounded-[20px] p-6">
+<b class="text-[13px]">6. CRM + Pagos - <span class="emp"></span></b>
+<div class="mt-4 grid md:grid-cols-3 gap-3">
+<div class="border rounded-xl p-4 bg-[#F6F8FA]"><b class="text-[11px]">Pipeline</b><div class="text-[11px] mt-2">Leads 124 / Cerrados 67</div></div>
+<div class="border rounded-xl p-4 bg-[#F6F8FA]"><b class="text-[11px]">Cartera</b><div class="text-[11px] mt-2">Vencida $2.3M</div></div>
+<div class="border rounded-xl p-4 bg-[#F6F8FA]"><b class="text-[11px]">Pagos</b><div class="text-[11px] mt-2">Nequi/PSE/PayPal</div></div>
+</div>
+</div>
+</div>
+
+<!-- 7. BODEGA PISTOLA NUEVO -->
+<div id="p7" class="tabPanel hidden mt-4">
+<div class="bg-white border rounded-[20px] p-6">
+<div class="flex justify-between flex-wrap gap-2"><b class="text-[13px]">7. Bodega Propia + Pistola + Barras - <span class="emp"></span> - Inventario Propio</b><small class="text-[10px] opacity-60">REF + Tallas + Cantidades + Barras + Entradas/Salidas pistola</small></div>
+
+<!-- CREAR REFERENCIA -->
+<div class="mt-4 border rounded-[16px] p-4 bg-[#F6F8FA]">
+<b class="text-[11px]">Crear referencia propia</b>
+<div class="grid md:grid-cols-4 gap-2 mt-2">
+<input id="b_ref" placeholder="REF Ej: CAM-001" class="h-10 border rounded-full px-4 text-[11px]">
+<input id="b_nombre" placeholder="Nombre Ej: Camiseta Oversize" class="h-10 border rounded-full px-4 text-[11px]">
+<input id="b_tallas" placeholder="Tallas S,M,L,XL o 28,30,32" class="h-10 border rounded-full px-4 text-[11px]">
+<button onclick="crearReferenciaBodega()" class="h-10 bg-[#0A2640] text-white rounded-full text-[11px] font-bold">+ Crear REF</button>
+</div>
+</div>
+
+<!-- LISTA BODEGA + PISTOLA -->
+<div class="mt-4 grid lg:grid-cols-2 gap-4">
+<div class="border rounded-[16px] p-4 bg-white">
+<b class="text-[11px]">Inventario bodega propia - <span class="emp"></span></b>
+<div id="listaBodega" class="mt-3 grid gap-2 max-h-[400px] overflow-auto text-[11px]"></div>
+<div class="mt-3 flex gap-2">
+<button onclick="imprimirBarras()" class="h-9 px-4 bg-[#1ECB6A] text-white rounded-full text-[10px] font-bold">🖨️ Imprimir Barras PDF</button>
+<button onclick="exportarCSV()" class="h-9 px-4 border rounded-full text-[10px] font-bold">Export CSV</button>
+</div>
+</div>
+
+<div class="border rounded-[16px] p-4 bg-[#FBFCFE]">
+<b class="text-[11px]">Pistola - Entradas / Salidas - Kardex</b>
+<div class="mt-3 bg-[#0A2640] text-white rounded-[12px] p-3">
+<small class="text-[10px] opacity-70">Escanea con pistola (lector actúa como teclado). Foco automático.</small>
+<input id="inputPistola" placeholder="Escanea código barras aquí... ENTER" class="mt-2 w-full h-12 rounded-full px-5 text-[14px] font-mono text-black outline-none" autofocus>
+<div class="mt-2 flex gap-2">
+<button onclick="setModoPistola('entrada')" id="btnEntrada" class="h-8 px-4 bg-[#1ECB6A] rounded-full text-[10px] font-bold">Modo ENTRADA (+)</button>
+<button onclick="setModoPistola('salida')" id="btnSalida" class="h-8 px-4 bg-white text-[#0A2640] rounded-full text-[10px] font-bold">Modo SALIDA (-)</button>
+<small id="modoPistolaTxt" class="text-[10px] self-center">Modo: ENTRADA</small>
+</div>
+</div>
+<div id="resultadoPistola" class="mt-3 p-3 border rounded-[12px] bg-white text-[11px] min-h-[60px]">Escanea un código para entrada/salida</div>
+<div class="mt-3">
+<b class="text-[10px]">Kardex <span class="emp"></span></b>
+<div id="kardexLista" class="mt-2 max-h-[200px] overflow-auto text-[10px] grid gap-1"></div>
+</div>
+</div>
+</div>
+
+<!-- AREA IMPRESION BARRAS -->
+<div id="areaBarras" class="mt-4 border rounded-[16px] p-4 bg-white print-area">
+<b class="text-[11px]">Etiquetas barras - Listas para imprimir</b>
+<div id="gridBarras" class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+</div>
+
+</div>
+</div>
+
+</div>
+<script>
+const MODS=[
+{id:"personas",name:"1. Personas, Roles y Organización (CORE FIJO)",price:0,fixed:true,comps:[
+{id:"pe1",name:"Administrador (acceso total)",price:0,fixed:true},
+{id:"pe2",name:"Supervisor de Pedidos",price:0,fixed:true},
+{id:"pe3",name:"Responsable de Caja",price:0,fixed:true},
+{id:"pe4",name:"Mensajeros / Patinadores",price:0,fixed:true}
+]},
+{id:"scan",name:"2. Escáner Diario + Compras Proveedores A/B/C",price:70000,comps:[
+{id:"s7",name:"Detecta producto A/B/C - Ranking Automático",price:12000},
+{id:"s8",name:"Actualiza catálogo virtual stockos.com/inv/",price:12000},
+{id:"s9",name:"Alerta stock bajo <5 por WA",price:10000},
+{id:"s10",name:"Órdenes A/B/C",price:12000},
+{id:"s11",name:"Control llegada bodega",price:12000},
+{id:"s12",name:"Espacio para pegar enlaces proveedores - Escaneo 7AM/2PM",price:12000}
+]},
+{id:"camp",name:"3. Campañas RRSS con IA",price:50000,comps:[
+{id:"c1",name:"Fotos optimizadas IA",price:10000},
+{id:"c2",name:"Precios 40%/85% (detal/mayorista)",price:10000},
+{id:"c3",name:"Copy + hashtags",price:10000},
+{id:"c5",name:"Publicaciones automáticas RRSS",price:10000},
+{id:"c6",name:"Pauta pagada (presupuesto aparte)",price:10000}
+]},
+{id:"disparo",name:"4. Disparo + Link Maestro Pro + Grupos Casa",price:75000,comps:[
+{id:"d1",name:"Link filtrable stockos.com/inv/tu-empresa",price:6250},
+{id:"d2",name:"Filtros avanzados (categoría, precio, stock)",price:6250},
+{id:"d3",name:"Publica en horarios óptimos por red social",price:6250},
+{id:"d4",name:"Grupos propios empresa",price:6250},
+{id:"d5",name:"Comunidades propias empresa",price:6250},
+{id:"d6",name:"Grupos venta - Grupos Casa",price:6250},
+{id:"d7",name:"Enlace celular empresa",price:6250},
+{id:"d8",name:"Escanea pedidos y compara inventario",price:6250},
+{id:"d9",name:"Cierra ventas auto en privado por WA Business",price:6250},
+{id:"d10",name:"Campañas bases datos WA Business",price:6250},
+{id:"d11",name:"Reportes y clics (quién vio)",price:6250},
+{id:"d12",name:"Link extra promo",price:6250}
+]},
+{id:"despachos",name:"5. Despachos, guía y organización",price:50000,comps:[
+{id:"de1",name:"Cierra venta",price:12500},
+{id:"de2",name:"Organiza pedidos por ruta",price:12500},
+{id:"de3",name:"Genera guía",price:12500},
+{id:"de4",name:"Todo listo despachar - checklist Mensajeros",price:12500}
+]},
+{id:"extras",name:"6. Fotos Variantes + Barras + CRM + Pagos",price:50000,comps:[
+{id:"ex1",name:"Tallas",price:7000},
+{id:"ex2",name:"Colores",price:7000},
+{id:"ex3",name:"Códigos barras Pistola (basico)",price:7000},
+{id:"ex4",name:"Etiquetas",price:7000},
+{id:"ex5",name:"CRM Mayorista vs Detal (40%/85%)",price:7000},
+{id:"ex6",name:"Historial pedidos",price:7000},
+{id:"ex7",name:"Pagos: Contraentrega/Transf/Efectivo/Nequi/PSE/PayPal",price:8000}
+]},
+{id:"bodega",name:"7. Bodega Propia + Pistola + Códigos Barras (NUEVO)",price:80000,comps:[
+{id:"bo1",name:"Crear referencia propia (REF-001)",price:10000},
+{id:"bo2",name:"Tallas por referencia",price:10000},
+{id:"bo3",name:"Cantidades por talla + stock real",price:10000},
+{id:"bo4",name:"Generar código barras EAN13 / CODE128",price:10000},
+{id:"bo5",name:"Imprimir etiquetas barras PDF",price:10000},
+{id:"bo6",name:"Entradas con pistola",price:10000},
+{id:"bo7",name:"Salidas + Kardex",price:10000},
+{id:"bo8",name:"Control bodega propia",price:10000}
+]}
+];
+
+let sel=new Set(JSON.parse(localStorage.getItem('stockos_infra_'+(new URLSearchParams(window.location.search).get('empresa')||localStorage.getItem('stockos_empresa_activa')||'virtualclass'))||'[]') || []);
+let modState=JSON.parse(localStorage.getItem('stockos_modState_'+(new URLSearchParams(window.location.search).get('empresa')||'virtualclass'))||'{}');
+if(Object.keys(modState).length===0){ MODS.forEach(m=>{ modState[m.id]= m.fixed?true:false }); }
+
+function showTab(n){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('t'+n).classList.add('active');
+  document.querySelectorAll('.tabPanel').forEach(p=>p.classList.add('hidden'));
+  document.getElementById('p'+n).classList.remove('hidden');
+}
+const emp=new URLSearchParams(window.location.search).get('empresa')||localStorage.getItem('stockos_empresa_activa')||'virtualclass';
+document.getElementById('nombreEmpresa').innerText=emp;
+document.getElementById('emp0').innerText=emp;
+document.querySelectorAll('.emp').forEach(e=>e.innerText=emp);
+
+function safeGet(k,d){ try{ const r=localStorage.getItem(k); return r?JSON.parse(r):d; }catch{ return d; } }
+function safeSet(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch{} }
+
+function renderInfra(){
+  const c=document.getElementById('infraLandingContainer');
+  c.innerHTML='';
+  MODS.forEach(mod=>{
+    const masterOn = mod.fixed ? true : (modState[mod.id]!==false);
+    const div=document.createElement('div');
+    div.className='border rounded-[16px] p-4 mb-3 bg-white';
+    const compsHtml = mod.comps.map(comp=>{
+      const on=comp.fixed?true:(sel.has(comp.id)&&masterOn);
+      const tog=comp.fixed?'<div class="toggle on" style="pointer-events:none"><div class="dot"></div></div>':'<div class="toggle '+(on?'on':'')+'" onclick="toggleComp(\''+comp.id+'\')"><div class="dot"></div></div>';
+      const badge=comp.fixed?'<span class="text-[8px] bg-[#0A2640] text-white px-2 py-0.5 rounded-full ml-1">FIJO</span>':'';
+      return '<div class="flex items-center justify-between bg-[#F6F8FA] border rounded-full px-3 py-2.5 '+(masterOn?'':'opacity-50')+'"><span class="text-[11px]">'+comp.name+badge+''+comp.price.toLocaleString()+'</b></span>'+tog+'</div>';
+    }).join('');
+    const masterTog=mod.fixed?'<div class="toggle on" style="pointer-events:none"><div class="dot"></div></div>':'<div class="toggle '+(masterOn?'on':'')+'" onclick="toggleMod(\''+mod.id+'\')"><div class="dot"></div></div>';
+    div.innerHTML='<div class="flex justify-between items-center mb-3"><b class="text-[13px]">'+mod.name+'</b>'+masterTog+'</div><div class="grid md:grid-cols-2 gap-2">'+compsHtml+'</div>';
+    c.appendChild(div);
+  });
+}
+function toggleMod(id){
+  const turningOn = (modState[id]===false) ? true : !modState[id];
+  modState[id]=turningOn;
+  // Si se apaga el módulo, apaga todos sus componentes; si se enciende, enciende todos (independientes entre módulos)
+  const mod = MODS.find(m=>m.id===id);
+  if(mod){
+    mod.comps.forEach(comp=>{
+      if(comp.fixed) return;
+      if(turningOn) sel.add(comp.id);
+      else sel.delete(comp.id);
+    });
+  }
+  safeSet('stockos_modState_'+emp, modState);
+  safeSet('stockos_infra_'+emp, JSON.stringify(Array.from(sel)));
+  renderInfra();
+}
+function toggleComp(id){ if(sel.has(id)) sel.delete(id); else sel.add(id); safeSet('stockos_infra_'+emp, JSON.stringify(Array.from(sel))); renderInfra(); }
+function guardarInfra(){ safeSet('stockos_infra_'+emp, JSON.stringify(Array.from(sel))); safeSet('stockos_modState_'+emp, modState); alert('Infra guardada para '+emp+' - Modulos: '+Object.keys(modState).filter(k=>modState[k]).length+' - Comps: '+sel.size+' - N8N/WA Ready'); }
+function agregarPersona(){ const n=document.getElementById('perNombre').value; const r=document.getElementById('perRol').value; const w=document.getElementById('perWA').value; if(!n) return; let l=safeGet('personas_'+emp,[]); l.push({id:Date.now(),nombre:n,rol:r,wa:w}); safeSet('personas_'+emp,l); renderPersonas(); }
+function renderPersonas(){ const l=safeGet('personas_'+emp,[]); document.getElementById('listaPersonas').innerHTML=l.map(p=>`<div class="border rounded-xl p-3 text-[11px] flex justify-between bg-white"><span><b>${p.nombre}</b> - ${p.rol} - ${p.wa}</span></div>`).join('')||'<small class="opacity-50">Sin personas - Agrega</small>'; }
+function guardarLinks(){ const v=document.getElementById('linksProveedores').value; safeSet('stockos_links_'+emp, v); alert('Enlaces guardados para escaner 7AM/2PM - '+emp); }
+function ejecutarEscaner(){ document.getElementById('resultadoEscaner').innerHTML='Escaneando... N8N Webhook stockos_escaner_'+emp+' - WA API - Proveedores A/B/C - Catalogo stockos.com/inv/'+emp+'<br><br>Resultado simulado: 124 productos detectados, 12 con stock <5, ranking A/B/C actualizado'; }
+function probarN8N(){ alert('N8N Webhook Test: https://n8n.stockos.com/webhook/stockos_escaner_'+emp+' - Listo para conectar'); }
+function probarWA(){ alert('WA API Test: Empresa '+emp+' - API Ready - Disparo + Link + Grupos Casa'); }
+
+renderInfra(); renderPersonas();
+
+// ===== BODEGA PROPIA + PISTOLA + BARRAS - NUEVO MODULO 7 =====
+let modoPistola='entrada';
+function setModoPistola(m){ modoPistola=m; document.getElementById('modoPistolaTxt').innerText='Modo: '+m.toUpperCase(); document.getElementById('btnEntrada').className=m==='entrada'?'h-8 px-4 bg-[#1ECB6A] rounded-full text-[10px] font-bold':'h-8 px-4 bg-white text-[#0A2640] rounded-full text-[10px] font-bold'; document.getElementById('btnSalida').className=m==='salida'?'h-8 px-4 bg-[#FF3B3B] text-white rounded-full text-[10px] font-bold':'h-8 px-4 bg-white text-[#0A2640] rounded-full text-[10px] font-bold'; document.getElementById('inputPistola').focus(); }
+
+function getBodega(){ return safeGet('stockos_bodega_'+emp, []); }
+function setBodega(arr){ safeSet('stockos_bodega_'+emp, arr); }
+function getKardex(){ return safeGet('stockos_kardex_'+emp, []); }
+function setKardex(arr){ safeSet('stockos_kardex_'+emp, arr); }
+
+function crearReferenciaBodega(){
+  const ref=document.getElementById('b_ref').value.trim().toUpperCase();
+  const nombre=document.getElementById('b_nombre').value.trim();
+  const tallasRaw=document.getElementById('b_tallas').value.trim();
+  if(!ref||!nombre){ alert('Pon REF y Nombre'); return; }
+  const tallas = tallasRaw ? tallasRaw.split(',').map(t=>t.trim().toUpperCase()).filter(Boolean) : ['UNICA'];
+  let bodega=getBodega();
+  if(bodega.some(b=>b.ref===ref)){ alert('REF ya existe'); return; }
+  const items = tallas.map(t=>{
+    const barcode = `${ref}-${t}`.replace(/\s+/g,'');
+    return {talla:t, cantidad:0, barcode};
+  });
+  bodega.push({id:Date.now(), ref, nombre, tallas: items, created:new Date().toLocaleString()});
+  setBodega(bodega);
+  document.getElementById('b_ref').value=''; document.getElementById('b_nombre').value=''; document.getElementById('b_tallas').value='';
+  renderBodega();
+  alert('REF '+ref+' creada con '+tallas.length+' tallas - Bodega propia '+emp);
+}
+
+function renderBodega(){
+  const bodega=getBodega();
+  const cont=document.getElementById('listaBodega');
+  if(!cont) return;
+  if(!bodega.length){ cont.innerHTML='<small class="opacity-50">Sin referencias - Crea REF propia arriba</small>'; renderBarras(); return; }
+  cont.innerHTML=bodega.map(b=>{
+    const total = b.tallas.reduce((s,t)=>s+ (t.cantidad||0),0);
+    const tallasHtml = b.tallas.map(t=>`<div class="flex justify-between items-center bg-[#F6F8FA] rounded-full px-3 py-1.5 mt-1"><span class="text-[10px]"><b>${t.talla}</b> - Stock: ${t.cantidad} - <span class="font-mono text-[9px]">${t.barcode}</span></span><div class="flex gap-1"><button onclick="ajustarStock('${b.ref}','${t.talla}',1)" class="h-6 w-6 bg-[#1ECB6A] text-white rounded-full">+</button><button onclick="ajustarStock('${b.ref}','${t.talla}',-1)" class="h-6 w-6 bg-[#FF3B3B] text-white rounded-full">-</button></div></div>`).join('');
+    return `<div class="border rounded-[12px] p-3 bg-white"><div class="flex justify-between"><b class="text-[11px]">${b.ref} - ${b.nombre}</b><span class="text-[10px] bg-[#0A2640] text-white px-2 py-0.5 rounded-full">Total ${total}</span></div>${tallasHtml}<div class="mt-2 flex gap-1"><button onclick="eliminarRef('${b.ref}')" class="h-6 px-2 border rounded-full text-[9px]">Eliminar</button></div></div>`;
+  }).join('');
+  renderBarras();
+  renderKardex();
+}
+
+function ajustarStock(ref,talla,delta){
+  let bodega=getBodega();
+  const item=bodega.find(b=>b.ref===ref);
+  if(!item) return;
+  const t=item.tallas.find(x=>x.talla===talla);
+  if(!t) return;
+  t.cantidad=Math.max(0, (t.cantidad||0)+delta);
+  setBodega(bodega);
+  // kardex
+  let kardex=getKardex();
+  kardex.unshift({fecha:new Date().toLocaleString(), ref, talla, tipo: delta>0?'ENTRADA':'SALIDA', cantidad: Math.abs(delta), stock: t.cantidad, barcode: t.barcode});
+  if(kardex.length>200) kardex=kardex.slice(0,200);
+  setKardex(kardex);
+  renderBodega();
+}
+
+function eliminarRef(ref){
+  if(!confirm('Eliminar REF '+ref+'?')) return;
+  let bodega=getBodega().filter(b=>b.ref!==ref);
+  setBodega(bodega);
+  renderBodega();
+}
+
+function renderBarras(){
+  const bodega=getBodega();
+  const grid=document.getElementById('gridBarras');
+  if(!grid) return;
+  grid.innerHTML='';
+  bodega.forEach(b=>{
+    b.tallas.forEach(t=>{
+      const div=document.createElement('div');
+      div.className='border rounded-[12px] p-2 bg-[#F6F8FA] text-center';
+      div.innerHTML=`<small class="text-[9px] font-bold">${b.ref} - ${t.talla} - ${b.nombre}</small><br><svg class="barcode" data-code="${t.barcode}"></svg><small class="text-[8px] font-mono">${t.barcode} - Stock ${t.cantidad}</small>`;
+      grid.appendChild(div);
+    });
+  });
+  // generar barras con JsBarcode
+  setTimeout(()=>{
+    document.querySelectorAll('.barcode').forEach(el=>{
+      try{ JsBarcode(el, el.dataset.code, {format:'CODE128', width:1.5, height:40, displayValue:false}); }catch(e){}
+    });
+  },100);
+}
+
+function imprimirBarras(){
+  renderBarras();
+  setTimeout(()=>window.print(), 500);
+}
+
+function exportarCSV(){
+  const bodega=getBodega();
+  let csv='REF,Nombre,Talla,Barcode,Cantidad,Empresa\n';
+  bodega.forEach(b=>{ b.tallas.forEach(t=>{ csv+=`${b.ref},${b.nombre},${t.talla},${t.barcode},${t.cantidad},${emp}\n`; }); });
+  const blob=new Blob([csv],{type:'text/csv'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download=`bodega_${emp}_${Date.now()}.csv`; a.click();
+}
+
+function renderKardex(){
+  const kardex=getKardex();
+  const cont=document.getElementById('kardexLista');
+  if(!cont) return;
+  if(!kardex.length){ cont.innerHTML='<small class="opacity-50">Sin movimientos pistola aun</small>'; return; }
+  cont.innerHTML=kardex.slice(0,50).map(k=>`<div class="flex justify-between border-b py-1"><span><b>${k.tipo}</b> ${k.ref}-${k.talla} x${k.cantidad} -> Stock ${k.stock}</span><span class="opacity-60">${k.fecha}</span></div>`).join('');
+}
+
+// Pistola escáner - detecta ENTER
+document.addEventListener('DOMContentLoaded', ()=>{
+  const inp=document.getElementById('inputPistola');
+  if(inp){
+    inp.addEventListener('keydown', (e)=>{
+      if(e.key==='Enter'){
+        const code=e.target.value.trim();
+        if(!code) return;
+        procesarEscaneoPistola(code);
+        e.target.value='';
+      }
+    });
+  }
+  renderBodega();
+});
+
+function procesarEscaneoPistola(code){
+  const bodega=getBodega();
+  let encontrado=null; let refEnc=null;
+  for(const b of bodega){
+    const t=b.tallas.find(x=>x.barcode===code || x.barcode.toUpperCase()===code.toUpperCase() || `${b.ref}-${x.talla}`===code);
+    if(t){ encontrado=t; refEnc=b; break; }
+  }
+  const res=document.getElementById('resultadoPistola');
+  if(!encontrado){
+    res.innerHTML=`<span class="text-[#FF3B3B]">❌ Código no encontrado: <b>${code}</b> - Crea REF primero</span>`;
+    return;
+  }
+  // ajustar según modo
+  const delta = modoPistola==='entrada'?1:-1;
+  ajustarStock(refEnc.ref, encontrado.talla, delta);
+  res.innerHTML=`<span class="${delta>0?'text-[#1ECB6A]':'text-[#FF3B3B]'}"><b>${modoPistola.toUpperCase()} OK</b> - ${refEnc.ref} ${encontrado.talla} - Stock ahora ${encontrado.cantidad+delta} - ${code}</span><br><small>${refEnc.nombre} - Empresa ${emp}</small>`;
+}
+
+// Inicializar bodega al cargar
+renderBodega();
+
+// Cargar links si existen
+// Cargar links si existen
+const savedLinks=safeGet('stockos_links_'+emp,''); if(savedLinks) document.getElementById('linksProveedores').value=savedLinks;
+</script>
+</body></html>
