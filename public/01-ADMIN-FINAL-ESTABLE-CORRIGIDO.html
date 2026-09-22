@@ -65,48 +65,15 @@ body{font-family:Montserrat,sans-serif}
 <div id="contenidos" class="mt-5">
 <div id="p0" class="tabPanel"><div class="border rounded-[16px] p-5 bg-[#FBFCFE]"><b class="text-[12px]">0. Definicion Infra por Empresa</b><p class="text-[11px] opacity-60 mt-2">Horarios óptimos por red social (FB/IG/TikTok) - Enlaces proveedores escaneo 7AM/2PM</p><div class="grid md:grid-cols-3 gap-3 mt-3"><input placeholder="Horario FB" class="h-10 border rounded-full px-4 bg-[#F6F8FA] text-[11px]"><input placeholder="Horario IG" class="h-10 border rounded-full px-4 bg-[#F6F8FA] text-[11px]"><input placeholder="Enlaces proveedores" class="h-10 border rounded-full px-4 bg-[#F6F8FA] text-[11px]"></div></div></div>
 <div id="p1" class="tabPanel hidden"><div class="border rounded-[16px] p-5 bg-[#FBFCFE]"><b class="text-[12px]">1. Personas y Roles (FIJO) - nombre / cargo / WhatsApp</b><div class="grid md:grid-cols-4 gap-2 mt-3"><input id="perNombre" placeholder="Nombre" class="h-10 border rounded-full px-4 bg-[#F6F8FA] text-[11px]"><input id="perCargo" placeholder="Cargo" class="h-10 border rounded-full px-4 bg-[#F6F8FA] text-[11px]"><input id="perWA" placeholder="WhatsApp" class="h-10 border rounded-full px-4 bg-[#F6F8FA] text-[11px]"><button onclick="guardarPersona()" class="h-10 bg-[#0A2640] text-white rounded-full text-[11px] font-bold">Agregar persona</button></div><div id="listaPersonas" class="mt-3 grid gap-2"></div></div></div>
-
-[... 10 lines truncated ...]
+<div id="p2" class="tabPanel hidden"><div class="border rounded-[16px] p-5 bg-[#FBFCFE]"><b class="text-[12px]">2. Escaner A/B/C - Proveedores</b><p class="text-[11px] opacity-60 mt-2">Enlaces de proveedores - Escaneo 7AM y 2PM - Stock &lt;5</p><input id="linksProveedores" placeholder="https://proveedor1.com, https://proveedor2.com" class="w-full mt-3 h-10 border rounded-full px-4 bg-white text-[11px]"><button onclick="guardarLinks()" class="mt-2 h-9 px-5 bg-[#0A2640] text-white rounded-full text-[11px]">Guardar enlaces</button></div></div>
+<div id="p3" class="tabPanel hidden"><div class="border rounded-[16px] p-5 bg-[#FBFCFE]"><b class="text-[12px]">3. Campanas IA</b><p class="text-[11px] opacity-60">Campañas por IA - URLs + Grupos WhatsApp</p></div></div>
+<div id="p4" class="tabPanel hidden"><div class="border rounded-[16px] p-5 bg-[#FBFCFE]"><b class="text-[12px]">4. Disparo + Link Maestro</b><p class="text-[11px] opacity-60">Link maestro por empresa - Disparo N8N + WA API</p></div></div>
+<div id="p5" class="tabPanel hidden"><div class="border rounded-[16px] p-5 bg-[#FBFCFE]"><b class="text-[12px]">5. Despachos</b><p class="text-[11px] opacity-60">Despachos y logística</p></div></div>
+<div id="p6" class="tabPanel hidden"><div class="border rounded-[16px] p-5 bg-[#FBFCFE]"><b class="text-[12px]">6. CRM + Pagos</b><p class="text-[11px] opacity-60">CRM y pagos - Tarifa $100.000 x módulo</p></div></div>
+<div id="p7" class="tabPanel hidden"><div class="border rounded-[16px] p-5 bg-[#FBFCFE]"><b class="text-[12px]">Bodega Stock &lt;5</b><p class="text-[11px] opacity-60">Vista rápida stock crítico</p><div id="miniBodega" class="mt-3 grid gap-2"></div></div></div>
 </div>
-</div>`;
-}
-
-function cambiarEstado(id,est){ let l=safeGet('stockos_ventas',[]); l=l.map(x=> x.id===id?{...x,estado:est}:x); safeSet('stockos_ventas',l); render(); }
-function eliminar(id){ if(!confirm('¿Eliminar empresa?')) return; let l=safeGet('stockos_ventas',[]); l=l.filter(x=>x.id!==id); safeSet('stockos_ventas',l); render(); }
-function crearDirecta(){
-const empEl=document.getElementById('nEmp'); const waEl=document.getElementById('nWA'); const emailEl=document.getElementById('nEmail'); const nitEl=document.getElementById('nNit');
-const emp=empEl.value.trim(); if(!emp){alert('Nombre empresa requerido');return;}
-let l=safeGet('stockos_ventas',[]);
-l.push({id:Date.now(),empresa:emp,wa:waEl.value,email:emailEl.value,nit:nitEl.value,total:100000,estado:'pausado',origen:'superadmin_directo',fecha:new Date().toLocaleString()});
-safeSet('stockos_ventas',l);
-empEl.value=''; waEl.value=''; emailEl.value=''; nitEl.value='';
-render();
-const anuncio=document.createElement('div'); anuncio.className='fixed top-4 left-1/2 -translate-x-1/2 bg-[#1ECB6A] text-white px-6 py-3 rounded-full text-[12px] font-bold z-50'; anuncio.innerText='✅ Empresa creada: '+emp+' - Campos limpiados'; document.body.appendChild(anuncio); setTimeout(()=>anuncio.remove(),3000);
-}
-async function aprobarSupa(id){
-let l=safeGet('stockos_ventas',[]); let c=l.find(x=>x.id===id); if(!c) return;
-try{ if(!supa) await initSupa(); const {data,error}=await supa.from('empresas').insert({name:c.empresa,whatsapp:c.wa||'',email:c.email||'',nit:c.nit||'',estado:'aprobado',total:c.total||200000}).select().single(); if(error) throw error; l=l.map(x=> x.id===id?{...x,estado:'aprobado'}:x); safeSet('stockos_ventas',l); render(); alert('Aprobada en Supabase: '+c.empresa); }catch(e){ l=l.map(x=> x.id===id?{...x,estado:'aprobado'}:x); safeSet('stockos_ventas',l); render(); alert('Aprobada local (Supabase error): '+c.empresa); }
-}
-function verPanel(empresa){
-localStorage.setItem('stockos_empresa_activa',empresa);
-// Abre el panel FULL blindado como en tus fotos
-const url='PANEL-EMPRESA-FINAL-BLINDADO-FULL-CORRIGIDO.html?empresa='+encodeURIComponent(empresa);
-window.open(url,'_blank');
-// fallback inline si no existe archivo
-try{
-empresaActiva=empresa;
-document.getElementById('nombreEmpresaActiva').innerText=empresa;
-document.getElementById('panelEmpresa').classList.remove('hidden');
-renderModulos(); renderPersonas();
-}catch{}
-}
-function cerrarPanel(){ try{ document.getElementById('panelEmpresa').classList.add('hidden'); }catch{} empresaActiva=""; }
-
-function guardarPersona(){ const n=document.getElementById('perNombre').value.trim(); const c=document.getElementById('perCargo').value.trim(); const w=document.getElementById('perWA').value.trim(); if(!n){alert('Nombre');return;} if(!empresaActiva){alert('Abre un panel primero');return;} let l=safeGet('personas_'+empresaActiva,[]); l.push({id:Date.now(),nombre:n,cargo:c,wa:w}); safeSet('personas_'+empresaActiva,l); document.getElementById('perNombre').value=''; document.getElementById('perCargo').value=''; document.getElementById('perWA').value=''; renderPersonas(); }
-function renderPersonas(){ if(!empresaActiva) return; const l=safeGet('personas_'+empresaActiva,[]); document.getElementById('listaPersonas').innerHTML=l.map(p=>`<div class="border rounded-xl p-2 text-[11px] flex justify-between bg-white"><span><b>${p.nombre}</b> - ${p.cargo} - ${p.wa}</span></div>`).join('')||'<small class="opacity-60 text-[10px]">Sin personas - agrega arriba</small>'; }
-
-initSupa(); render(); renderModulos();
-</script>
+</div>
+</div>
 
 <!-- LOGO EMPRESA PARA PWA -->
 <div class="mt-6 bg-white border border-black/10 rounded-[20px] p-6">
@@ -120,22 +87,81 @@ initSupa(); render(); renderModulos();
 <button onclick="guardarLogo()" class="mt-4 h-11 px-8 bg-[#0A2640] text-white rounded-full text-[12px] font-bold">Guardar Logo para PWA</button>
 <div id="listaLogos" class="mt-4 grid gap-2"></div>
 </div>
+
+<script>
+let supa=null; let empresaActiva="";
+function safeGet(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch{return d}}
+function safeSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
+async function initSupa(){try{if(window.supabase){supa=window.supabase.createClient('https://placeholder.supabase.co','placeholder');}}catch{}}
+function render(){
+  const all=safeGet('stockos_ventas',[]);
+  const directos=all.filter(x=>x.origen==='superadmin_directo');
+  const landing=all.filter(x=>x.origen!=='superadmin_directo');
+  document.getElementById('countLanding').innerText=landing.length+' registrados';
+  const dirCont=document.getElementById('listaDirectos');
+  const landCont=document.getElementById('listaLanding');
+  const card=(x)=>`<div class="border border-black/10 rounded-[16px] p-4 flex justify-between items-center bg-[#F6F8FA] flex-wrap gap-2"><div><b class="text-[12px] uppercase">${x.empresa}</b><br><small class="text-[10px] opacity-60">${x.wa||''} | ${x.email||''} | ${x.nit||''} | $${x.total||0} | ${x.estado} | ${x.fecha||''}</small></div><div class="flex gap-2"><button onclick="verPanel('${x.empresa}')" class="h-8 px-4 bg-[#0A2640] text-white rounded-full text-[10px] font-bold">Ver Panel</button><button onclick="aprobarSupa(${x.id})" class="h-8 px-3 border rounded-full text-[10px]">Aprobar</button><button onclick="cambiarEstado(${x.id},'pausado')" class="h-8 px-3 border rounded-full text-[10px]">Pausar</button><button onclick="eliminar(${x.id})" class="h-8 px-3 border rounded-full text-[10px]">Eliminar</button></div></div>`;
+  dirCont.innerHTML=directos.length?directos.map(card).join(''):'<small class="opacity-60 text-[11px]">Sin empresas directas - Crea arriba</small>';
+  landCont.innerHTML=landing.length?landing.map(card).join(''):'<small class="opacity-60 text-[11px]">Sin registros landing</small>';
+}
+function renderModulos(){}
+function showTab(i){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tabPanel').forEach(p=>p.classList.add('hidden'));
+  const tab=document.getElementById('t'+i); if(tab) tab.classList.add('active');
+  const pan=document.getElementById('p'+i); if(pan) pan.classList.remove('hidden');
+}
+function cambiarEstado(id,est){ let l=safeGet('stockos_ventas',[]); l=l.map(x=> x.id===id?{...x,estado:est}:x); safeSet('stockos_ventas',l); render(); }
+function eliminar(id){ if(!confirm('¿Eliminar empresa?')) return; let l=safeGet('stockos_ventas',[]); l=l.filter(x=>x.id!==id); safeSet('stockos_ventas',l); render(); }
+function crearDirecta(){
+  const empEl=document.getElementById('nEmp'); const waEl=document.getElementById('nWA'); const emailEl=document.getElementById('nEmail'); const nitEl=document.getElementById('nNit');
+  const emp=empEl.value.trim(); if(!emp){alert('Nombre empresa requerido');return;}
+  let l=safeGet('stockos_ventas',[]);
+  l.push({id:Date.now(),empresa:emp,wa:waEl.value,email:emailEl.value,nit:nitEl.value,total:100000,estado:'aprobado',origen:'superadmin_directo',fecha:new Date().toLocaleString()});
+  safeSet('stockos_ventas',l);
+  empEl.value=''; waEl.value=''; emailEl.value=''; nitEl.value='';
+  render();
+  const anuncio=document.createElement('div'); anuncio.className='fixed top-4 left-1/2 -translate-x-1/2 bg-[#1ECB6A] text-white px-6 py-3 rounded-full text-[12px] font-bold z-50'; anuncio.innerText='✅ Empresa creada: '+emp; document.body.appendChild(anuncio); setTimeout(()=>anuncio.remove(),3000);
+  verPanel(emp);
+}
+async function aprobarSupa(id){
+  let l=safeGet('stockos_ventas',[]); let c=l.find(x=>x.id===id); if(!c) return;
+  try{ if(!supa) await initSupa(); const {data,error}=await supa.from('empresas').insert({name:c.empresa,whatsapp:c.wa||'',email:c.email||'',nit:c.nit||'',estado:'aprobado',total:c.total||200000}).select().single(); if(error) throw error; l=l.map(x=> x.id===id?{...x,estado:'aprobado'}:x); safeSet('stockos_ventas',l); render(); alert('Aprobada en Supabase: '+c.empresa); }catch(e){ l=l.map(x=> x.id===id?{...x,estado:'aprobado'}:x); safeSet('stockos_ventas',l); render(); alert('Aprobada local: '+c.empresa); }
+}
+function verPanel(empresa){
+  localStorage.setItem('stockos_empresa_activa',empresa);
+  const url='PANEL-EMPRESA-FINAL-BLINDADO-6MODULOS.html?empresa='+encodeURIComponent(empresa);
+  window.open(url,'_blank');
+  try{
+    empresaActiva=empresa;
+    document.getElementById('nombreEmpresaActiva').innerText=empresa;
+    document.getElementById('panelEmpresa').classList.remove('hidden');
+    renderModulos(); renderPersonas();
+  }catch{}
+}
+function cerrarPanel(){ try{ document.getElementById('panelEmpresa').classList.add('hidden'); }catch{} empresaActiva=""; }
+function guardarPersona(){ const n=document.getElementById('perNombre').value.trim(); const c=document.getElementById('perCargo').value.trim(); const w=document.getElementById('perWA').value.trim(); if(!n){alert('Nombre');return;} if(!empresaActiva){alert('Abre un panel primero - click Ver Panel');return;} let l=safeGet('personas_'+empresaActiva,[]); l.push({id:Date.now(),nombre:n,cargo:c,wa:w}); safeSet('personas_'+empresaActiva,l); document.getElementById('perNombre').value=''; document.getElementById('perCargo').value=''; document.getElementById('perWA').value=''; renderPersonas(); }
+function renderPersonas(){ if(!empresaActiva) return; const l=safeGet('personas_'+empresaActiva,[]); document.getElementById('listaPersonas').innerHTML=l.map(p=>`<div class="border rounded-xl p-2 text-[11px] flex justify-between bg-white"><span><b>${p.nombre}</b> - ${p.cargo} - ${p.wa}</span></div>`).join('')||'<small class="opacity-60 text-[10px]">Sin personas - agrega arriba</small>'; }
+function guardarLinks(){ const v=document.getElementById('linksProveedores').value; safeSet('stockos_links_'+(empresaActiva||'global'),v); alert('Enlaces guardados'); }
+initSupa(); render(); renderModulos();
+</script>
+
 <script>
 document.getElementById('logoFile')?.addEventListener('change', e=>{
-const file=e.target.files[0]; if(!file) return;
-const reader=new FileReader(); reader.onload=ev=>{ document.getElementById('logoImg').src=ev.target.result; document.getElementById('logoPreview').classList.remove('hidden'); window._logoBase64=ev.target.result; }; reader.readAsDataURL(file);
+  const file=e.target.files[0]; if(!file) return;
+  const reader=new FileReader(); reader.onload=ev=>{ document.getElementById('logoImg').src=ev.target.result; document.getElementById('logoPreview').classList.remove('hidden'); window._logoBase64=ev.target.result; }; reader.readAsDataURL(file);
 });
 function guardarLogo(){
-const empresa=document.getElementById('logoEmpresa').value.trim()||'MAXIMA'; const logo=window._logoBase64||'';
-if(!logo){ alert('Selecciona logo'); return; }
-let logos=JSON.parse(localStorage.getItem('stockos_logos')||'[]'); logos=logos.filter(l=>l.empresa!==empresa); logos.push({empresa,logo,fecha:new Date().toLocaleString()}); localStorage.setItem('stockos_logos', JSON.stringify(logos));
-alert('✅ Logo guardado para '+empresa+' - Se verá en PWA final');
-renderLogos();
+  const empresa=document.getElementById('logoEmpresa').value.trim()||'MAXIMA'; const logo=window._logoBase64||'';
+  if(!logo){ alert('Selecciona logo'); return; }
+  let logos=safeGet('stockos_logos',[]); logos=logos.filter(l=>l.empresa!==empresa); logos.push({empresa,logo,fecha:new Date().toLocaleString()}); safeSet('stockos_logos',logos);
+  alert('✅ Logo guardado para '+empresa);
+  renderLogos();
 }
 function renderLogos(){
-const cont=document.getElementById('listaLogos'); if(!cont) return;
-const logos=JSON.parse(localStorage.getItem('stockos_logos')||'[]');
-cont.innerHTML=logos.map(l=>`<div class="border rounded-xl p-3 flex justify-between items-center bg-white"><span class="flex items-center gap-2"><img src="${l.logo}" class="w-10 h-10 rounded-full object-cover"><b class="text-[11px]">${l.empresa}</b></span><small class="text-[10px] opacity-60">${l.fecha}</small></div>`).join('')||'<small class="opacity-50">Sin logos - Sube logo MAXIMA</small>';
+  const cont=document.getElementById('listaLogos'); if(!cont) return;
+  const logos=safeGet('stockos_logos',[]);
+  cont.innerHTML=logos.map(l=>`<div class="border rounded-xl p-3 flex justify-between items-center bg-white"><span class="flex items-center gap-2"><img src="${l.logo}" class="w-10 h-10 rounded-full object-cover"><b class="text-[11px]">${l.empresa}</b></span><small class="text-[10px] opacity-60">${l.fecha}</small></div>`).join('')||'<small class="opacity-50">Sin logos</small>';
 }
 renderLogos();
 </script>
