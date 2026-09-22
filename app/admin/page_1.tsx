@@ -1,1 +1,0 @@
-export default function AdminPage(){return(<iframe src='/01-ADMIN-FINAL-ESTABLE-CORRIGIDO.html' style={{width:'100%',height:'100vh',border:'none'}}/>);}
